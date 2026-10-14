@@ -11,7 +11,7 @@ pub const UI_COMMANDS: &[(&str, &str, Option<&str>, &str)] = &[
     ("app.placeDialog", "Place…", Some("Cmd+D"), "{}"),
     ("app.saveDialog", "Save As…", Some("Cmd+Shift+S"), "{}"),
     ("app.save", "Save", Some("Cmd+S"), "{}"),
-    ("app.quit", "Quit DesignCraft", Some("Cmd+Q"), "{} — close the window; each document with unsaved changes asks first"),
+    ("app.quit", "Quit FisiLayout", Some("Cmd+Q"), "{} — close the window; each document with unsaved changes asks first"),
     ("app.saveCopyDialog", "Save a Copy…", Some("Cmd+Alt+S"), "{} — choose where to write a copy (the document stays as it is)"),
     ("app.loadSwatches", "Load Swatches…", None, "{} — pick a swatch exchange (.ase) file"),
     ("app.packageDialog", "Package…", Some("Cmd+Alt+Shift+P"), "{} — choose the package folder to create (file.package)"),
@@ -179,15 +179,15 @@ pub const UI_COMMANDS: &[(&str, &str, Option<&str>, &str)] = &[
         "{on?: bool, at?: [x, y] (points from the canvas's top-left)} — the Contextual Task Bar stays where it is (or at `at`) instead of following the selection; with neither, toggles",
     ),
     ("window.taskBarReset", "Reset Bar Position", None, "{} — the Contextual Task Bar follows the selection again, under it"),
-    ("help.discord", "Join the ArtCraft Discord…", None, "{} — opens https://discord.gg/artcraft in the browser"),
-    ("help.appPage", "DesignCraft Website…", None, "{} — opens https://getartcraft.com/apps/designcraft"),
-    ("help.github", "DesignCraft on GitHub…", None, "{} — opens https://github.com/storytold/designcraft"),
-    ("help.issues", "Report an Issue…", None, "{} — opens the GitHub issue tracker"),
-    ("help.website", "ArtCraft Website…", None, "{} — opens https://getartcraft.com"),
-    ("help.app", "ArtCraft App Page…", None, "{app} — opens https://getartcraft.com/apps/{app} (e.g. photocraft)"),
+    ("help.suite", "Site da Suíte FisiLab…", None, "{} — opens https://github.com/mrcandrade/larfic/tree/main/suite-fisilab in the browser"),
+    ("help.manifesto", "Manifesto pelas tecnologias livres…", None, "{} — opens the Suíte FisiLab manifesto (MANIFESTO.md)"),
+    ("help.upstream", "Projeto original (DesignCraft)…", None, "{} — opens https://github.com/storytold/designcraft"),
+    ("help.github", "Código-fonte do FisiLayout…", None, "{} — opens https://github.com/mrcandrade/fisilayout"),
+    ("help.issues", "Reportar um problema…", None, "{} — opens https://github.com/mrcandrade/fisilayout/issues"),
+    ("help.fisilab", fisilab_brand::ABOUT_MENU_LABEL, None, "{} — the Suíte FisiLab About window (UFRGS, CTA, credits, manifesto)"),
     (
         "help.about",
-        "About DesignCraft",
+        "About FisiLayout",
         None,
         "{open?: true, tab?: \"about\"|\"contributors\"|\"models\"} — the About window: splash with community links, contributor and model credits (open: false closes it)",
     ),
@@ -201,7 +201,7 @@ pub const UI_COMMANDS: &[(&str, &str, Option<&str>, &str)] = &[
     ("window.newWorkspace", "New Workspace…", None, "{name} — saves the current bars and panel arrangement"),
     ("window.deleteWorkspace", "Delete Workspace…", None, "{name}"),
     ("window.resetWorkspace", "Reset Workspace", None, "{} — back to the current workspace as saved (or its defaults)"),
-    ("window.brightness", "Interface Color Theme", None, "{brightness: dark|mediumDark|mediumLight|light|highContrast}"),
+    ("window.brightness", "Interface Color Theme", None, "{brightness: ufrgsNoite|ufrgsDia|dark|mediumDark|mediumLight|light|highContrast}"),
 ];
 
 /// Menu bar: (menu, entries). Entries: `cmd:<id>`, `ui:<id>`, `-` separator, `>Submenu` … `<`.
@@ -738,15 +738,16 @@ pub const MENUS: &[(&str, &[&str])] = &[
     (
         "Help",
         &[
-            "ui:help.discord",
+            "ui:help.suite",
+            "ui:help.manifesto",
             "-",
-            "ui:help.appPage",
+            "ui:help.upstream",
             "ui:help.github",
             "ui:help.issues",
-            "ui:help.website",
             "-",
             "cmd:file.newSample",
             "-",
+            "ui:help.fisilab",
             "ui:help.about",
         ],
     ),
@@ -1415,14 +1416,11 @@ pub fn run_ui(app: &mut DesignApp, id: &str, p: &Value) -> Option<Result<Value, 
             app.ui.about = p.get("open").and_then(Value::as_bool).unwrap_or(true);
             Ok(json!(app.ui.about))
         }
-        "help.app" => match p.get("app").and_then(Value::as_str) {
-            Some(slug) if !slug.is_empty() && slug.chars().all(|c| c.is_ascii_alphanumeric() || c == '-') => {
-                let url = format!("{}/apps/{slug}", designcraft_engine::links::WEBSITE);
-                app.ui.pending_urls.push(url.clone());
-                Ok(json!({"url": url}))
-            }
-            _ => Err("help.app: give `app` (e.g. \"photocraft\")".into()),
-        },
+        "help.fisilab" => {
+            // Opened on the next frame (it needs the egui context): see `DesignApp::ui`.
+            app.ui.fisilab_about = true;
+            Ok(json!(true))
+        }
         h if h.starts_with("help.") && designcraft_engine::links::get(&h[5..]).is_some() => {
             let url = designcraft_engine::links::get(&h[5..]).unwrap_or_default().to_string();
             app.ui.pending_urls.push(url.clone());
@@ -1515,7 +1513,7 @@ pub fn run_ui(app: &mut DesignApp, id: &str, p: &Value) -> Option<Result<Value, 
             Ok(Value::Null)
         }
         "window.brightness" => {
-            let b = p.get("brightness").and_then(Value::as_str).and_then(crate::theme::Brightness::parse).unwrap_or(crate::theme::Brightness::Dark);
+            let b = p.get("brightness").and_then(Value::as_str).and_then(crate::theme::Brightness::parse).unwrap_or_default();
             app.ui.brightness = b;
             app.restyle = true;
             Ok(Value::Null)

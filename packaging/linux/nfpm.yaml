@@ -14,7 +14,7 @@ section: graphics
 priority: optional
 maintainer: ${DESIGNCRAFT_MAINTAINER}
 vendor: Learning Machines LLC
-homepage: https://getartcraft.com/apps/designcraft
+homepage: https://github.com/mrcandrade/larfic/tree/main/suite-fisilab
 license: MIT OR Apache-2.0
 description: |-
   Open-source, native page layout and publishing that works the way InDesign users expect.

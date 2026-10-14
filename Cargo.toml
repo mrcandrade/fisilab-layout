@@ -30,6 +30,8 @@ designcraft-engine = { path = "crates/engine" }
 designcraft-ui-egui = { path = "crates/ui-egui" }
 designcraft-mcp = { path = "crates/mcp" }
 designcraft-testkit = { path = "crates/testkit" }
+# Suíte FisiLab (UFRGS) brand: palette, splash, About window.
+fisilab-brand = { path = "crates/fisilab-brand" }
 
 # foundation
 kurbo = { version = "0.13", features = ["serde"] }

@@ -97,13 +97,13 @@ impl Backend for Remote {
         let line = json!({"id": id, "method": method, "params": params}).to_string();
         if let Err(e) = self.prepare_connection() {
             self.conn = None;
-            return Err(format!("DesignCraft app at {} is not reachable: {e}; nothing was sent", self.addr));
+            return Err(format!("FisiLayout app at {} is not reachable: {e}; nothing was sent", self.addr));
         }
         let reply = match self.roundtrip(&line) {
             Ok(r) => r,
             Err(e) => {
                 self.conn = None;
-                return Err(format!("DesignCraft app at {}: {e}; operation may have completed; inspect state before retrying", self.addr));
+                return Err(format!("FisiLayout app at {}: {e}; operation may have completed; inspect state before retrying", self.addr));
             }
         };
         let v: Value = serde_json::from_str(reply.trim()).map_err(|e| format!("bad reply from app: {e}"))?;
@@ -119,7 +119,7 @@ impl Backend for Remote {
     }
 
     fn describe(&self) -> String {
-        format!("connected to the DesignCraft app at {}", self.addr)
+        format!("connected to the FisiLayout app at {}", self.addr)
     }
 }
 

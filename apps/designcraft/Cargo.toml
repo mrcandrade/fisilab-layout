@@ -5,14 +5,20 @@ edition.workspace = true
 rust-version.workspace = true
 license.workspace = true
 publish = false
-default-run = "designcraft"
+default-run = "fisilayout"
 
 [lints]
 workspace = true
 
+# Suíte FisiLab: the GUI is fisilayout.exe (the package name stays `designcraft`).
+[[bin]]
+name = "fisilayout"
+path = "src/main.rs"
+
 [dependencies]
 designcraft-engine = { workspace = true }
 designcraft-ui-egui = { workspace = true }
+fisilab-brand = { workspace = true }
 eframe = { workspace = true, features = ["default_fonts", "wgpu", "accesskit", "wayland", "x11", "links"] }
 egui = { workspace = true }
 serde = { workspace = true }

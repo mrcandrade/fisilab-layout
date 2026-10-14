@@ -124,9 +124,18 @@ pub fn app_bar(app: &mut DesignApp, ui: &mut egui::Ui) {
                             app.status("Export a PDF, IDML or package to share — no cloud account needed.");
                         }
                         ui.add_space(8.0);
-                        // Always one click away: the ArtCraft community Discord.
-                        if crate::about::discord_button(ui, "Discord", vec2(78.0, 22.0)) {
-                            let _ = app.run("help.discord", json!({}));
+                        // Suíte FisiLab: its About window, one click away.
+                        if ui
+                            .add(
+                                egui::Button::new(egui::RichText::new("FisiLab").size(11.5).color(Color32::WHITE))
+                                    .fill(t.accent_strong)
+                                    .corner_radius(11.0)
+                                    .min_size(vec2(64.0, 22.0)),
+                            )
+                            .on_hover_text(fisilab_brand::ABOUT_MENU_LABEL)
+                            .clicked()
+                        {
+                            let _ = app.run("help.fisilab", json!({}));
                         }
                         tools_start = ui.min_rect().min.x;
                         ui.min_rect().width()
@@ -139,8 +148,8 @@ pub fn app_bar(app: &mut DesignApp, ui: &mut egui::Ui) {
             });
             // Centred title.
             let title = match app.session.active() {
-                Some(d) => format!("DesignCraft — {}", crate::rtl::isolate(&d.title())),
-                None => "DesignCraft".to_string(),
+                Some(d) => format!("FisiLayout — {}", crate::rtl::isolate(&d.title())),
+                None => "FisiLayout".to_string(),
             };
             // Centred between the menus and the right-hand controls; left out when it won't fit.
             let galley = crate::rtl::plain(ui.ctx(), &title, egui::FontId::proportional(11.5), t.text);
@@ -662,7 +671,7 @@ pub fn start_screen(app: &mut DesignApp, ui: &mut egui::Ui) {
         |ui| {
             ui.label(crate::rtl::widget(
                 ui,
-                egui::RichText::new(crate::i18n::tr(&app.ui.language, "Welcome to DesignCraft")).font(semibold(28.0)).color(t.text_strong),
+                egui::RichText::new(crate::i18n::tr(&app.ui.language, "Welcome to FisiLayout")).font(semibold(28.0)).color(t.text_strong),
             ));
             ui.label(crate::rtl::widget(
                 ui,
@@ -744,44 +753,49 @@ pub fn start_screen(app: &mut DesignApp, ui: &mut egui::Ui) {
     let _ = Content::Unassigned;
 }
 
-/// Start screen: the ArtCraft community (Discord first) and project links.
+/// Start screen: the Suíte FisiLab card (who makes this build available, the credit to the original
+/// project) and its links.
 fn community_card(app: &mut DesignApp, ui: &mut egui::Ui) {
     let t = Tokens::get(ui.ctx());
     egui::Frame::NONE.fill(t.panel).corner_radius(10.0).inner_margin(egui::Margin::same(14)).show(ui, |ui| {
         ui.set_max_width(640.0);
         ui.horizontal(|ui| {
             let (r, _) = ui.allocate_exact_size(vec2(44.0, 44.0), Sense::hover());
-            crate::about::paint_mark(ui, r, crate::about::BRAND);
+            crate::about::paint_app_icon(ui, r);
             ui.add_space(8.0);
             ui.vertical(|ui| {
                 ui.label(crate::rtl::widget(
                     ui,
-                    egui::RichText::new(crate::i18n::tr(&app.ui.language, "Join the ArtCraft community")).font(semibold(14.0)).color(t.text_strong),
+                    egui::RichText::new(format!("{} · {}", fisilab_brand::SUITE, fisilab_brand::LAB)).font(semibold(14.0)).color(t.text_strong),
                 ));
                 ui.label(crate::rtl::widget(
                     ui,
-                    egui::RichText::new(crate::i18n::tr(&app.ui.language, "Get help, share your layouts and shape what we build next."))
-                        .size(12.0)
-                        .color(t.text_dim),
+                    egui::RichText::new(format!(
+                        "Software livre, em parceria com o {}. Baseado no DesignCraft, da ArtCraft Team e contribuidores.",
+                        fisilab_brand::PARTNER
+                    ))
+                    .size(12.0)
+                    .color(t.text_dim),
                 ));
                 ui.add_space(4.0);
-                ui.horizontal(|ui| {
-                    for (text, id) in [("DesignCraft page", "help.appPage"), ("GitHub", "help.github"), ("getartcraft.com", "help.website")] {
-                        let url = designcraft_engine::links::get(&id[5..]).unwrap_or_default();
+                ui.horizontal_wrapped(|ui| {
+                    for (text, key) in crate::about::SUITE_LINKS {
+                        let url = designcraft_engine::links::get(key).unwrap_or_default();
                         let l = ui
-                            .add(egui::Label::new(egui::RichText::new(text).size(12.0).color(t.accent).underline()).sense(Sense::click()))
+                            .add(egui::Label::new(egui::RichText::new(text).size(12.0).color(t.focus).underline()).sense(Sense::click()))
                             .on_hover_text(url)
                             .on_hover_cursor(egui::CursorIcon::PointingHand);
                         if l.clicked() {
-                            let _ = app.run(id, json!({}));
+                            let _ = app.run(&format!("help.{key}"), json!({}));
                         }
                         ui.add_space(8.0);
                     }
                 });
             });
             ui.with_layout(egui::Layout::right_to_left(egui::Align::Center), |ui| {
-                if crate::about::discord_button(ui, crate::i18n::tr(&app.ui.language, "Join our Discord"), vec2(190.0, 38.0)) {
-                    let _ = app.run("help.discord", json!({}));
+                let label = egui::RichText::new(fisilab_brand::ABOUT_MENU_LABEL.trim_end_matches('…')).size(13.0).color(Color32::WHITE);
+                if ui.add(egui::Button::new(label).fill(t.accent_strong).corner_radius(19.0).min_size(vec2(190.0, 38.0))).clicked() {
+                    let _ = app.run("help.fisilab", json!({}));
                 }
             });
         });

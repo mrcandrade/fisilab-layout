@@ -21,8 +21,8 @@ impl Default for Headless {
 }
 
 /// Hint appended to errors for methods that need a window.
-pub(crate) const NEEDS_APP: &str = "it needs the desktop app: start `designcraft --control 7979` and run the MCP server \
-with `designcraft-cli mcp --connect 7979`";
+pub(crate) const NEEDS_APP: &str = "it needs the desktop app: start `fisilayout --control 7979` and run the MCP server \
+with `fisilayout-cli mcp --connect 7979`";
 
 const VIEW: ViewInfo = ViewInfo::at_zoom(1.0);
 

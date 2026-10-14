@@ -37,6 +37,18 @@ use serde_json::{Value, json};
 
 pub use control::{ControlRequest, ControlResponse};
 
+/// FisiLayout in the Suíte FisiLab (FisiLab — LARFIC · UFRGS, with the CTA): what the brand's
+/// splash and "Sobre a Suíte FisiLab" window say about this app.
+pub const APP_INFO: fisilab_brand::AppInfo = fisilab_brand::AppInfo {
+    name: "FisiLayout",
+    tagline: "Diagramação e editoração",
+    equivalent: "Adobe InDesign",
+    version: env!("CARGO_PKG_VERSION"),
+    upstream_name: "DesignCraft",
+    upstream_url: "https://github.com/storytold/designcraft",
+    upstream_copyright: "© 2026 ArtCraft Team e contribuidores do DesignCraft",
+};
+
 pub type ReadFn = Box<dyn Fn(&str) -> Result<Vec<u8>, String>>;
 pub type WriteFn = Box<dyn FnMut(&str, &[u8]) -> Result<(), String>>;
 pub type PickFn = Box<dyn FnMut(&str) -> Option<String>>;
@@ -279,8 +291,11 @@ pub struct UiState {
     /// Where the Contextual Task Bar was last shown, like [`Self::task_bar_pin`].
     #[serde(skip)]
     pub task_bar_at: Option<[f32; 2]>,
-    /// Help › About DesignCraft is open.
+    /// Help › About FisiLayout is open.
     pub about: bool,
+    /// Help › Sobre a Suíte FisiLab was chosen: the brand window opens on the next frame.
+    #[serde(skip)]
+    pub fisilab_about: bool,
     /// The About window's tab: 0 About, 1 Contributors, 2 Models (`about::ABOUT_TABS`).
     #[serde(skip)]
     pub about_tab: u8,
@@ -303,7 +318,7 @@ pub struct UiState {
 impl Default for UiState {
     fn default() -> Self {
         UiState {
-            brightness: theme::Brightness::MediumDark,
+            brightness: theme::Brightness::default(),
             screen_mode: ScreenMode::Normal,
             frame_edges: true,
             rulers: true,
@@ -368,6 +383,7 @@ impl Default for UiState {
             task_bar_pin: None,
             task_bar_at: None,
             about: false,
+            fisilab_about: false,
             about_tab: 0,
             pending_urls: Vec::new(),
             status: String::new(),
@@ -1165,6 +1181,12 @@ impl DesignApp {
             ctx.request_repaint();
             return;
         }
+        // Suíte FisiLab: the brand's About window and start-up splash, drawn on top of everything
+        // (Order::Debug) on every frame once the fonts are installed.
+        if std::mem::take(&mut self.ui.fisilab_about) {
+            fisilab_brand::about::open(&ctx);
+        }
+        fisilab_brand::frame(&ctx, &APP_INFO);
         let t0 = now_ms();
         let t = theme::Tokens::get(&ctx);
         let presenting = self.ui.screen_mode == ScreenMode::Presentation;

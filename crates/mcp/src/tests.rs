@@ -94,7 +94,7 @@ fn protocol_round_trip_over_serve() {
     let lines: Vec<Value> = String::from_utf8(out).unwrap().lines().map(|l| serde_json::from_str(l).unwrap()).collect();
     assert_eq!(lines.len(), 5, "one reply per request, none for the notification");
     assert_eq!(lines[0]["result"]["protocolVersion"], PROTOCOL_VERSION);
-    assert_eq!(lines[0]["result"]["serverInfo"]["name"], "designcraft");
+    assert_eq!(lines[0]["result"]["serverInfo"]["name"], "fisilayout");
     assert!(lines[0]["result"]["capabilities"]["tools"].is_object());
     assert!(lines[0]["result"]["instructions"].as_str().unwrap().contains("headless"));
     let tools = lines[1]["result"]["tools"].as_array().unwrap();

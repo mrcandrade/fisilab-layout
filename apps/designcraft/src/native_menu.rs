@@ -36,15 +36,15 @@ impl NativeMenu {
         let mut items = HashMap::new();
         let mut counter = 0usize;
         // Application menu.
-        let app_menu = Submenu::new("DesignCraft", true);
-        // Our own About splash (with the community links) instead of the stock panel.
-        let about = MenuItem::with_id("dc-about", "About DesignCraft", true, None);
-        let discord = MenuItem::with_id("dc-discord", "Join the ArtCraft Discord…", true, None);
+        let app_menu = Submenu::new("FisiLayout", true);
+        // Our own About window (with the Suíte FisiLab links) instead of the stock panel.
+        let about = MenuItem::with_id("dc-about", "About FisiLayout", true, None);
+        let fisilab = MenuItem::with_id("dc-fisilab", fisilab_brand::ABOUT_MENU_LABEL, true, None);
         // Not the predefined Quit: it terminates the app at once, past the unsaved-changes prompt.
-        let quit = MenuItem::with_id("dc-quit", designcraft_ui_egui::i18n::tr(&app.ui.language, "Quit DesignCraft"), true, accel("Cmd+Q"));
+        let quit = MenuItem::with_id("dc-quit", designcraft_ui_egui::i18n::tr(&app.ui.language, "Quit FisiLayout"), true, accel("Cmd+Q"));
         let _ = app_menu.append_items(&[
             &about,
-            &discord,
+            &fisilab,
             &PredefinedMenuItem::separator(),
             &PredefinedMenuItem::services(None),
             &PredefinedMenuItem::separator(),
@@ -55,7 +55,7 @@ impl NativeMenu {
             &quit,
         ]);
         items.insert("dc-about".into(), ("help.about".into(), serde_json::Value::Null, Handle::Plain(about)));
-        items.insert("dc-discord".into(), ("help.discord".into(), serde_json::Value::Null, Handle::Plain(discord)));
+        items.insert("dc-fisilab".into(), ("help.fisilab".into(), serde_json::Value::Null, Handle::Plain(fisilab)));
         items.insert("dc-quit".into(), ("app.quit".into(), serde_json::Value::Null, Handle::Plain(quit)));
         let _ = menu.append(&app_menu);
         for (title, entries) in menus::menu_tree() {

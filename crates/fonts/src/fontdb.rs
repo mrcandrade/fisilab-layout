@@ -1186,7 +1186,7 @@ impl FontDb {
             .map(Arc::new)
             .collect();
         if faces.is_empty() {
-            return Err("not a font DesignCraft can read".into());
+            return Err("not a font FisiLayout can read".into());
         }
         self.document_files.lock().unwrap_or_else(|e| e.into_inner()).insert(path.to_path_buf(), (listed, modified, faces.clone()));
         Ok((faces, len))

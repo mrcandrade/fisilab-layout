@@ -894,6 +894,7 @@ dependencies = [
  "designcraft-ui-egui",
  "eframe",
  "egui",
+ "fisilab-brand",
  "log",
  "muda",
  "rfd",
@@ -1151,10 +1152,12 @@ dependencies = [
  "designcraft-fonts",
  "designcraft-geom",
  "designcraft-idml",
+ "designcraft-images",
  "designcraft-render",
  "designcraft-tools",
  "egui",
  "egui_kittest",
+ "fisilab-brand",
  "log",
  "regex",
  "serde",
@@ -1556,6 +1559,13 @@ name = "find-msvc-tools"
 version = "0.1.14"
 source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "aedcfb3409746eddb02b9e19ebda1c3394f759a152e48ee875a0844d1b955484"
+
+[[package]]
+name = "fisilab-brand"
+version = "1.0.0"
+dependencies = [
+ "egui",
+]
 
 [[package]]
 name = "flate2"

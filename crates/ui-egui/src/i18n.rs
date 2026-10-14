@@ -709,8 +709,8 @@ const TABLE: &[(&str, [&str; 5])] = &[
         ["Spreads of up to 10 pages", "Spreads of up to 10 pages", "Spreads of up to 10 pages", "Spreads of up to 10 pages", "最多10页的跨页"],
     ),
     ("for", ["for", "pour", "por", "に対して", "行"]),
-    ("About DesignCraft", ["About DesignCraft", "About DesignCraft", "About DesignCraft", "About DesignCraft", "关于 DesignCraft"]),
-    ("Quit DesignCraft", ["DesignCraft beenden", "Quitter DesignCraft", "Salir de DesignCraft", "DesignCraft を終了", "退出 DesignCraft"]),
+    ("About FisiLayout", ["About FisiLayout", "About FisiLayout", "About FisiLayout", "About FisiLayout", "关于 FisiLayout"]),
+    ("Quit FisiLayout", ["FisiLayout beenden", "Quitter FisiLayout", "Salir de FisiLayout", "FisiLayout を終了", "退出 FisiLayout"]),
     ("Accept All Changes", ["Accept All Changes", "Accept All Changes", "Accept All Changes", "Accept All Changes", "接受所有更改"]),
     ("Activate Document", ["Activate Document", "Activate Document", "Activate Document", "Activate Document", "激活文档"]),
     ("Add Anchor Point", ["Add Anchor Point", "Add Anchor Point", "Add Anchor Point", "Add Anchor Point", "添加锚点"]),
@@ -771,8 +771,6 @@ const TABLE: &[(&str, [&str; 5])] = &[
         "Apply Parent to Pages…",
         ["Apply Parent to Pages…", "Apply Parent to Pages…", "Apply Parent to Pages…", "Apply Parent to Pages…", "将主页应用于页面…"],
     ),
-    ("ArtCraft App Page…", ["ArtCraft App Page…", "ArtCraft App Page…", "ArtCraft App Page…", "ArtCraft App Page…", "ArtCraft 应用页面…"]),
-    ("ArtCraft Website…", ["ArtCraft Website…", "ArtCraft Website…", "ArtCraft Website…", "ArtCraft Website…", "ArtCraft 网站…"]),
     ("Attributes", ["Attributes", "Attributes", "Attributes", "Attributes", "属性"]),
     ("Bevel and Emboss", ["Bevel and Emboss", "Bevel and Emboss", "Bevel and Emboss", "Bevel and Emboss", "斜面和浮雕"]),
     ("Buttons", ["Buttons", "Buttons", "Buttons", "Buttons", "按钮"]),
@@ -907,11 +905,6 @@ const TABLE: &[(&str, [&str; 5])] = &[
     ("Delete Item", ["Delete Item", "Delete Item", "Delete Item", "Delete Item", "删除项目"]),
     ("Delete Text Variable", ["Delete Text Variable", "Delete Text Variable", "Delete Text Variable", "Delete Text Variable", "删除文本变量"]),
     ("Delete Workspace…", ["Delete Workspace…", "Delete Workspace…", "Delete Workspace…", "Delete Workspace…", "删除工作区…"]),
-    ("DesignCraft Website…", ["DesignCraft Website…", "DesignCraft Website…", "DesignCraft Website…", "DesignCraft Website…", "DesignCraft 网站…"]),
-    (
-        "DesignCraft on GitHub…",
-        ["DesignCraft on GitHub…", "DesignCraft on GitHub…", "DesignCraft on GitHub…", "DesignCraft on GitHub…", "DesignCraft 在 GitHub 上…"],
-    ),
     (
         "Detach All Objects from Parent",
         [
@@ -1048,16 +1041,6 @@ const TABLE: &[(&str, [&str; 5])] = &[
     ("Insert Variable", ["Insert Variable", "Insert Variable", "Insert Variable", "Insert Variable", "插入变量"]),
     ("Inspect Document", ["Inspect Document", "Inspect Document", "Inspect Document", "Inspect Document", "检查文档"]),
     ("Interface Color Theme", ["Interface Color Theme", "Interface Color Theme", "Interface Color Theme", "Interface Color Theme", "界面颜色主题"]),
-    (
-        "Join the ArtCraft Discord…",
-        [
-            "Join the ArtCraft Discord…",
-            "Join the ArtCraft Discord…",
-            "Join the ArtCraft Discord…",
-            "Join the ArtCraft Discord…",
-            "加入 ArtCraft Discord…",
-        ],
-    ),
     ("Last Object Below", ["Last Object Below", "Last Object Below", "Last Object Below", "Last Object Below", "下方最后一个对象"]),
     ("Library Contents", ["Library Contents", "Library Contents", "Library Contents", "Library Contents", "库内容"]),
     ("Library Items", ["Library Items", "Library Items", "Library Items", "Library Items", "库项目"]),
@@ -1541,7 +1524,7 @@ const TABLE: &[(&str, [&str; 5])] = &[
         ["Cross-Reference Format", "Cross-Reference Format", "Cross-Reference Format", "Cross-Reference Format", "交叉引用格式"],
     ),
     ("Delete Workspace", ["Delete Workspace", "Delete Workspace", "Delete Workspace", "Delete Workspace", "删除工作区"]),
-    ("DesignCraft", ["DesignCraft", "DesignCraft", "DesignCraft", "DesignCraft", "DesignCraft"]),
+    ("FisiLayout", ["FisiLayout", "FisiLayout", "FisiLayout", "FisiLayout", "FisiLayout"]),
     ("Display Performance", ["Display Performance", "Display Performance", "Display Performance", "Display Performance", "显示性能"]),
     ("Document Grid", ["Document Grid", "Document Grid", "Document Grid", "Document Grid", "文档网格"]),
     (
@@ -1560,16 +1543,6 @@ const TABLE: &[(&str, [&str; 5])] = &[
     ),
     ("Facing Pages", ["Facing Pages", "Facing Pages", "Facing Pages", "Facing Pages", "对页"]),
     ("GREP Styles", ["GREP Styles", "GREP Styles", "GREP Styles", "GREP Styles", "GREP 样式"]),
-    (
-        "Get help, share your layouts and shape what we build next.",
-        [
-            "Get help, share your layouts and shape what we build next.",
-            "Get help, share your layouts and shape what we build next.",
-            "Get help, share your layouts and shape what we build next.",
-            "Get help, share your layouts and shape what we build next.",
-            "获取帮助，分享您的布局，共同塑造我们的未来。",
-        ],
-    ),
     ("Highlight", ["Highlight", "Highlight", "Highlight", "Highlight", "高亮显示"]),
     (
         "Hyperlinks & Cross-References",
@@ -1584,20 +1557,9 @@ const TABLE: &[(&str, [&str; 5])] = &[
     ("Hyphens and Dashes", ["Hyphens and Dashes", "Hyphens and Dashes", "Hyphens and Dashes", "Hyphens and Dashes", "连字符和破折号"]),
     ("Interactive", ["Interactive", "Interactive", "Interactive", "Interactive", "交互式"]),
     ("Invert", ["Invert", "Invert", "Invert", "Invert", "反相"]),
-    (
-        "Join the ArtCraft community",
-        [
-            "Join the ArtCraft community",
-            "Join the ArtCraft community",
-            "Join the ArtCraft community",
-            "Join the ArtCraft community",
-            "加入 ArtCraft 社区",
-        ],
-    ),
     ("Keyboard Increments", ["Keyboard Increments", "Keyboard Increments", "Keyboard Increments", "Keyboard Increments", "键盘增量"]),
     ("Liquid guides", ["Liquid guides", "Liquid guides", "Liquid guides", "Liquid guides", "自适应参考线"]),
     ("Markers", ["Markers", "Markers", "Markers", "Markers", "标记"]),
-    ("More ArtCraft apps", ["More ArtCraft apps", "More ArtCraft apps", "More ArtCraft apps", "More ArtCraft apps", "更多 ArtCraft 应用"]),
     ("Nested Line Styles", ["Nested Line Styles", "Nested Line Styles", "Nested Line Styles", "Nested Line Styles", "嵌套行样式"]),
     ("Nested Styles", ["Nested Styles", "Nested Styles", "Nested Styles", "Nested Styles", "嵌套样式"]),
     (
@@ -1716,16 +1678,6 @@ const TABLE: &[(&str, [&str; 5])] = &[
         ],
     ),
     ("Page · PPI", ["Page · PPI", "Page · PPI", "Page · PPI", "Page · PPI", "页面 · PPI"]),
-    (
-        "Part of the ArtCraft suite of open creative tools.",
-        [
-            "Part of the ArtCraft suite of open creative tools.",
-            "Part of the ArtCraft suite of open creative tools.",
-            "Part of the ArtCraft suite of open creative tools.",
-            "Part of the ArtCraft suite of open creative tools.",
-            "ArtCraft 开源创意工具套件的一部分。",
-        ],
-    ),
     ("Pasteboard Options", ["Pasteboard Options", "Pasteboard Options", "Pasteboard Options", "Pasteboard Options", "粘贴板选项"]),
     ("Paths", ["Paths", "Paths", "Paths", "Paths", "路径"]),
     (
@@ -1882,8 +1834,8 @@ const TABLE: &[(&str, [&str; 5])] = &[
     ("Utilities", ["Utilities", "Utilities", "Utilities", "Utilities", "实用程序"]),
     ("Variable Font", ["Variable Font", "Variable Font", "Variable Font", "Variable Font", "可变字体"]),
     (
-        "Welcome to DesignCraft",
-        ["Welcome to DesignCraft", "Welcome to DesignCraft", "Welcome to DesignCraft", "Welcome to DesignCraft", "欢迎使用 DesignCraft"],
+        "Welcome to FisiLayout",
+        ["Welcome to FisiLayout", "Welcome to FisiLayout", "Welcome to FisiLayout", "Welcome to FisiLayout", "欢迎使用 FisiLayout"],
     ),
     ("When Scaling", ["When Scaling", "When Scaling", "When Scaling", "When Scaling", "缩放时"]),
     ("[Basic] (working) ▾", ["[Basic] (working) ▾", "[Basic] (working) ▾", "[Basic] (working) ▾", "[Basic] (working) ▾", "[基本] (工作区) ▾"]),
@@ -1898,16 +1850,6 @@ const TABLE: &[(&str, [&str; 5])] = &[
             "[None] — choose a colour on the ramp.",
             "[None] — choose a colour on the ramp.",
             "[无] — 在色带上选择一种颜色。",
-        ],
-    ),
-    (
-        "discord.gg/artcraft — help, feedback and show-and-tell",
-        [
-            "discord.gg/artcraft — help, feedback and show-and-tell",
-            "discord.gg/artcraft — help, feedback and show-and-tell",
-            "discord.gg/artcraft — help, feedback and show-and-tell",
-            "discord.gg/artcraft — help, feedback and show-and-tell",
-            "discord.gg/artcraft — 帮助、反馈和展示",
         ],
     ),
     (
@@ -2653,7 +2595,6 @@ const TABLE: &[(&str, [&str; 5])] = &[
     ("H&J Violations", ["H&J Violations", "H&J Violations", "H&J Violations", "H&J Violations", "断字与对齐违规"]),
     ("Include Bleed", ["Include Bleed", "Include Bleed", "Include Bleed", "Include Bleed", "包含出血"]),
     ("Include Stroke Weight", ["Include Stroke Weight", "Include Stroke Weight", "Include Stroke Weight", "Include Stroke Weight", "包含描边粗细"]),
-    ("Join our Discord", ["Join our Discord", "Join our Discord", "Join our Discord", "Join our Discord", "加入我们的 Discord 社区"]),
     ("Keep Violations", ["Keep Violations", "Keep Violations", "Keep Violations", "Keep Violations", "保持选项违规"]),
     (
         "Overprint [Black] Swatch at 100%",

@@ -117,7 +117,7 @@ pub fn export_pdf_with_report(doc: &Document, cache: &Cache, opts: &PdfOptions) 
     let mut pdf = krilla::Document::new_with(settings);
 
     let title = opts.title.clone().unwrap_or_else(|| doc.title.clone());
-    let mut meta = Metadata::new().creator("DesignCraft".into()).producer("DesignCraft".into());
+    let mut meta = Metadata::new().creator("FisiLayout".into()).producer("FisiLayout".into());
     if !title.is_empty() {
         meta = meta.title(title.clone());
     }
@@ -246,7 +246,7 @@ pub fn export_pdf_with_report(doc: &Document, cache: &Cache, opts: &PdfOptions) 
 /// comes with its pages' sizes (points).
 pub fn merge_pdfs(parts: &[(Vec<u8>, Vec<(f32, f32)>)], title: Option<&str>) -> Result<Vec<u8>> {
     let mut pdf = krilla::Document::new_with(krilla::SerializeSettings::default());
-    let mut meta = Metadata::new().creator("DesignCraft".into()).producer("DesignCraft".into());
+    let mut meta = Metadata::new().creator("FisiLayout".into()).producer("FisiLayout".into());
     if let Some(t) = title {
         meta = meta.title(t.to_string());
     }
@@ -311,7 +311,7 @@ pub fn export_booklet(doc: &Document, cache: &Cache, opts: &BookletOptions) -> R
     let settings = krilla::SerializeSettings { compress_content_streams: true, ..Default::default() };
     let mut pdf = krilla::Document::new_with(settings);
     let title = opts.title.clone().unwrap_or_else(|| doc.title.clone());
-    let mut meta = Metadata::new().creator("DesignCraft".into()).producer("DesignCraft".into());
+    let mut meta = Metadata::new().creator("FisiLayout".into()).producer("FisiLayout".into());
     if !title.is_empty() {
         meta = meta.title(title);
     }

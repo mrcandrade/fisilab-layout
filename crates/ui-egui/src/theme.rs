@@ -7,8 +7,12 @@ use serde::{Deserialize, Serialize};
 
 #[derive(Clone, Copy, Debug, Default, PartialEq, Eq, Serialize, Deserialize)]
 pub enum Brightness {
-    Dark,
+    /// Suíte FisiLab: the dark UFRGS theme (`fisilab_brand::palette::NOITE`), the default.
     #[default]
+    UfrgsNoite,
+    /// Suíte FisiLab: the light UFRGS theme (`fisilab_brand::palette::DIA`).
+    UfrgsDia,
+    Dark,
     MediumDark,
     MediumLight,
     Light,
@@ -17,9 +21,19 @@ pub enum Brightness {
 }
 
 impl Brightness {
-    pub const ALL: [Brightness; 5] = [Brightness::Dark, Brightness::MediumDark, Brightness::MediumLight, Brightness::Light, Brightness::HighContrast];
+    pub const ALL: [Brightness; 7] = [
+        Brightness::UfrgsNoite,
+        Brightness::UfrgsDia,
+        Brightness::Dark,
+        Brightness::MediumDark,
+        Brightness::MediumLight,
+        Brightness::Light,
+        Brightness::HighContrast,
+    ];
     pub fn label(self) -> &'static str {
         match self {
+            Brightness::UfrgsNoite => "UFRGS Noite",
+            Brightness::UfrgsDia => "UFRGS Dia",
             Brightness::Dark => "Dark",
             Brightness::MediumDark => "Medium Dark",
             Brightness::MediumLight => "Medium Light",
@@ -29,6 +43,8 @@ impl Brightness {
     }
     pub fn id(self) -> &'static str {
         match self {
+            Brightness::UfrgsNoite => "ufrgsNoite",
+            Brightness::UfrgsDia => "ufrgsDia",
             Brightness::Dark => "dark",
             Brightness::MediumDark => "mediumDark",
             Brightness::MediumLight => "mediumLight",
@@ -83,10 +99,74 @@ pub struct Tokens {
     /// Measurement labels on the canvas (smart dimensions, gaps).
     pub measure_bg: Color32,
     pub measure_text: Color32,
+    /// Links and keyboard focus.
+    pub focus: Color32,
+    /// egui's selection fill (selected labels, selected text).
+    pub selection: Color32,
+    /// Popup and window shadow.
+    pub shadow: Color32,
 }
 
 fn hex(s: u32) -> Color32 {
     Color32::from_rgb((s >> 16) as u8, (s >> 8) as u8, s as u8)
+}
+
+/// `a` → `b` by `k` (0..1), opaque.
+fn mix(a: Color32, b: Color32, k: f32) -> Color32 {
+    let l = |x: u8, y: u8| (f32::from(x) + (f32::from(y) - f32::from(x)) * k).round().clamp(0.0, 255.0) as u8;
+    Color32::from_rgb(l(a.r(), b.r()), l(a.g(), b.g()), l(a.b(), b.b()))
+}
+
+/// A premultiplied translucent `top` composited over the opaque `bottom`.
+fn over(top: Color32, bottom: Color32) -> Color32 {
+    let k = 1.0 - f32::from(top.a()) / 255.0;
+    let l = |t: u8, b: u8| (f32::from(t) + f32::from(b) * k).round().clamp(0.0, 255.0) as u8;
+    Color32::from_rgb(l(top.r(), bottom.r()), l(top.g(), bottom.g()), l(top.b(), bottom.b()))
+}
+
+/// The Suíte FisiLab themes ("UFRGS Noite" / "UFRGS Dia"): every colour from the brand tones;
+/// layout values (radius) and document overlays (smart guides) as in `base`.
+fn ufrgs(p: &fisilab_brand::palette::Tons, base: Tokens) -> Tokens {
+    let night = fisilab_brand::palette::NOITE.fundo;
+    let strong = if p.escuro { p.texto_destaque } else { night };
+    let field = mix(p.borda, p.texto_fraco, 0.35);
+    Tokens {
+        dark: p.escuro,
+        app_bar: p.painel,
+        panel: p.painel,
+        panel_darker: mix(p.fundo, p.painel, 0.5),
+        input: p.elevado,
+        input_border: field,
+        divider: p.borda,
+        text: p.texto,
+        text_strong: strong,
+        text_dim: p.texto_fraco,
+        text_disabled: mix(p.texto_fraco, p.painel, 0.4),
+        icon: mix(p.texto, p.texto_fraco, 0.25),
+        hover: p.hover,
+        tool_active: p.ativo,
+        accent: p.destaque,
+        accent_strong: p.destaque,
+        row_selected: over(p.selecao, p.painel),
+        pasteboard: p.fundo,
+        ruler: if p.escuro { p.fundo } else { p.elevado },
+        ruler_tick: p.texto_fraco,
+        tab_inactive: mix(p.fundo, p.painel, 0.5),
+        button: p.painel,
+        border: p.borda,
+        field_border: field,
+        well: if p.escuro { p.fundo } else { p.ativo },
+        well_rim: if p.escuro { p.ativo } else { p.borda },
+        ruler_text: p.texto,
+        section_divider: p.borda,
+        tab_strip: mix(p.fundo, p.painel, 0.5),
+        measure_bg: Color32::from_rgba_unmultiplied(p.elevado.r(), p.elevado.g(), p.elevado.b(), 230),
+        measure_text: p.texto,
+        focus: p.foco,
+        selection: over(p.selecao, p.painel),
+        shadow: Color32::from_rgba_unmultiplied(night.r(), night.g(), night.b(), if p.escuro { 120 } else { 70 }),
+        ..base
+    }
 }
 
 impl Tokens {
@@ -125,8 +205,13 @@ impl Tokens {
             smart_guide: hex(0x00c853),
             measure_bg: Color32::from_rgba_unmultiplied(70, 70, 70, 230),
             measure_text: Color32::WHITE,
+            focus: hex(0x378ef0),
+            selection: hex(0x1473e6),
+            shadow: Color32::from_black_alpha(90),
         };
         match b {
+            Brightness::UfrgsNoite => ufrgs(&fisilab_brand::palette::NOITE, dark),
+            Brightness::UfrgsDia => ufrgs(&fisilab_brand::palette::DIA, dark),
             Brightness::Dark => dark,
             // Measured from InDesign 2026 (plan/indesign/11-observed-ui.md §1).
             Brightness::MediumDark => Tokens {
@@ -234,6 +319,8 @@ impl Tokens {
                 tool_active: hex(0x5c5c00),
                 accent: hex(0xffeb3b),
                 accent_strong: hex(0xffd600),
+                focus: hex(0xffeb3b),
+                selection: hex(0xffd600),
                 row_selected: hex(0x5c5c00),
                 pasteboard: hex(0x1a1a1a),
                 ruler: hex(0x000000),
@@ -328,9 +415,9 @@ pub fn apply(ctx: &egui::Context, t: &Tokens) {
     v.window_stroke = Stroke::new(1.0, t.divider);
     v.window_corner_radius = CornerRadius::same(4);
     v.menu_corner_radius = CornerRadius::same(4);
-    v.selection.bg_fill = t.accent_strong;
+    v.selection.bg_fill = t.selection;
     v.selection.stroke = Stroke::new(1.0, t.text_strong);
-    v.hyperlink_color = t.accent;
+    v.hyperlink_color = t.focus;
     v.override_text_color = Some(t.text);
     craft_ui::theme::WidgetPalette { noninteractive: t.panel, inactive: t.button, hovered: t.hover, active: t.tool_active, open: t.hover }.apply_to(
         &mut v.widgets,
@@ -344,7 +431,7 @@ pub fn apply(ctx: &egui::Context, t: &Tokens) {
     // InDesign buttons are outline-only.
     v.widgets.inactive.weak_bg_fill = Color32::TRANSPARENT;
     v.widgets.inactive.bg_fill = t.input;
-    v.popup_shadow = egui::epaint::Shadow { offset: [0, 4], blur: 12, spread: 0, color: Color32::from_black_alpha(90) };
+    v.popup_shadow = egui::epaint::Shadow { offset: [0, 4], blur: 12, spread: 0, color: t.shadow };
     ctx.set_visuals(v);
     ctx.global_style_mut(|s| {
         s.text_styles = text_styles.clone();
@@ -359,7 +446,7 @@ pub fn apply(ctx: &egui::Context, t: &Tokens) {
 impl Tokens {
     /// Tokens stored by [`apply`].
     pub fn get(ctx: &egui::Context) -> Tokens {
-        ctx.data(|d| d.get_temp::<Tokens>(egui::Id::NULL)).unwrap_or_else(|| Tokens::for_brightness(Brightness::Dark))
+        ctx.data(|d| d.get_temp::<Tokens>(egui::Id::NULL)).unwrap_or_else(|| Tokens::for_brightness(Brightness::default()))
     }
 }
 
@@ -443,5 +530,90 @@ mod ukrainian_font_tests {
                 assert_ne!(face.glyph_for(*character), 0, "missing {character} in {name}");
             }
         }
+    }
+}
+
+#[cfg(test)]
+mod ufrgs_theme_tests {
+    use super::*;
+
+    fn luminance(c: Color32) -> f32 {
+        let f = |x: u8| {
+            let s = f32::from(x) / 255.0;
+            if s <= 0.04045 { s / 12.92 } else { ((s + 0.055) / 1.055).powf(2.4) }
+        };
+        0.2126 * f(c.r()) + 0.7152 * f(c.g()) + 0.0722 * f(c.b())
+    }
+
+    fn contrast(a: Color32, b: Color32) -> f32 {
+        let (x, y) = (luminance(a), luminance(b));
+        (x.max(y) + 0.05) / (x.min(y) + 0.05)
+    }
+
+    #[test]
+    fn ufrgs_noite_is_the_default_and_both_ufrgs_themes_come_first() {
+        assert_eq!(Brightness::default(), Brightness::UfrgsNoite);
+        assert_eq!(&Brightness::ALL[..2], &[Brightness::UfrgsNoite, Brightness::UfrgsDia]);
+        assert_eq!(crate::UiState::default().brightness, Brightness::UfrgsNoite);
+        // The upstream themes stay available.
+        for b in [Brightness::Dark, Brightness::MediumDark, Brightness::MediumLight, Brightness::Light, Brightness::HighContrast] {
+            assert!(Brightness::ALL.contains(&b), "{b:?}");
+        }
+    }
+
+    #[test]
+    fn every_theme_parses_by_id_and_label() {
+        for b in Brightness::ALL {
+            assert_eq!(Brightness::parse(b.id()), Some(b));
+            assert_eq!(Brightness::parse(b.label()), Some(b));
+        }
+        assert_eq!(Brightness::parse("ufrgsNoite"), Some(Brightness::UfrgsNoite));
+        assert_eq!(Brightness::parse("UFRGS Dia"), Some(Brightness::UfrgsDia));
+        let ids: std::collections::HashSet<_> = Brightness::ALL.iter().map(|b| b.id()).collect();
+        assert_eq!(ids.len(), Brightness::ALL.len(), "unique ids");
+    }
+
+    #[test]
+    fn ufrgs_themes_use_the_brand_tones() {
+        use fisilab_brand::palette::{DIA, NOITE};
+        for (b, p) in [(Brightness::UfrgsNoite, &NOITE), (Brightness::UfrgsDia, &DIA)] {
+            let t = Tokens::for_brightness(b);
+            assert_eq!(t.dark, p.escuro, "{b:?}");
+            assert_eq!((t.panel, t.pasteboard, t.input, t.hover), (p.painel, p.fundo, p.elevado, p.hover), "{b:?}");
+            assert_eq!((t.text, t.text_dim, t.accent, t.focus), (p.texto, p.texto_fraco, p.destaque, p.foco), "{b:?}");
+            // Layout is the upstream default's, only the colours change.
+            assert_eq!(t.radius, Tokens::for_brightness(Brightness::MediumDark).radius);
+        }
+    }
+
+    #[test]
+    fn ufrgs_themes_keep_text_readable() {
+        for b in [Brightness::UfrgsNoite, Brightness::UfrgsDia] {
+            let t = Tokens::for_brightness(b);
+            for bg in [t.panel, t.panel_darker, t.input, t.hover, t.row_selected, t.selection, t.pasteboard, t.app_bar] {
+                assert!(contrast(t.text, bg) >= 4.5, "{b:?}: text on {bg:?} is {:.2}", contrast(t.text, bg));
+                assert!(contrast(t.text_strong, bg) >= 4.5, "{b:?}: strong text on {bg:?}");
+            }
+            for bg in [t.panel, t.input] {
+                assert!(contrast(t.text_dim, bg) >= 3.0, "{b:?}: dim text on {bg:?}");
+                assert!(contrast(t.focus, bg) >= 3.0, "{b:?}: links on {bg:?}");
+            }
+            // White labels on the primary (accent) buttons.
+            assert!(contrast(Color32::WHITE, t.accent_strong) >= 4.5, "{b:?}: button label");
+            assert!(contrast(t.ruler_text, t.ruler) >= 4.5, "{b:?}: ruler numbers");
+        }
+    }
+
+    #[test]
+    fn applying_a_ufrgs_theme_sets_egui_visuals() {
+        let ctx = egui::Context::default();
+        let t = Tokens::for_brightness(Brightness::UfrgsNoite);
+        apply(&ctx, &t);
+        let v = ctx.global_style().visuals.clone();
+        assert!(v.dark_mode);
+        assert_eq!(v.panel_fill, t.panel);
+        assert_eq!(v.hyperlink_color, t.focus);
+        assert_eq!(v.selection.bg_fill, t.selection);
+        assert_eq!(Tokens::get(&ctx).panel, t.panel);
     }
 }
