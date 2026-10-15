@@ -139,7 +139,7 @@ pub fn show(app: &mut DesignApp, ctx: &egui::Context) {
             ui.add_space(12.0);
             ui.horizontal_wrapped(|ui| {
                 for (text, key) in SUITE_LINKS {
-                    if link(ui, text, links::get(key).unwrap_or_default(), t.focus) {
+                    if link(ui, text, links::get(key).unwrap_or_default(), t.accent) {
                         open = Some(key);
                     }
                     ui.add_space(6.0);

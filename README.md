@@ -38,9 +38,8 @@
   renderizar, exportar e rodar scripts de comandos sem abrir a janela.
 - **Revista de exemplo:** *Ajuda › Documento de exemplo* (ou `fisilab-layout --sample`) abre uma revista inteira montada pelo
   próprio programa, para explorar os recursos.
-- **Interface em português do Brasil** (padrão), além de inglês, alemão, francês, espanhol,
-  japonês, chinês, árabe, italiano e ucraniano; temas de cores **UFRGS Noite** (padrão) e
-  **UFRGS Dia**.
+- **Interface em português do Brasil** na primeira abertura, além de inglês, alemão, francês, espanhol,
+  japonês, chinês, árabe, italiano e ucraniano; paleta de cores original, com os temas **Noite** (padrão) e **Dia**.
 
 ## Instalação
 

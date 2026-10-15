@@ -36,11 +36,10 @@ mesmos termos (MIT OR Apache-2.0).
   do CTA). A tela de abertura aparece só no aplicativo de desktop (`FISILAB_NO_SPLASH=1` a desliga).
 - Novo item de menu **Ajuda › Sobre a Suíte FisiLab…** (comando `help.fisilab`), um botão "FisiLab"
   na barra do aplicativo e um botão "Sobre a Suíte FisiLab" na tela inicial e na janela Sobre.
-- Novos temas de cores **"UFRGS Noite"** (escuro, padrão) e **"UFRGS Dia"** (claro), primeiros da
-  lista *Janela › Interface Color Theme*, construídos a partir das cores da marca (vermelho da
-  chama do LARFIC, marinho, creme, azul do CTA e da UFRGS). Só as cores mudam; o layout é o do tema
-  padrão original. Os temas originais (Dark, Medium Dark, Medium Light, Light, High Contrast)
-  continuam disponíveis.
+- Cores: a paleta original do DesignCraft foi mantida. Os temas originais *Medium Dark* (padrão) e
+  *Medium Light* aparecem, com as cores inalteradas, como **"Noite"** (escuro) e **"Dia"** (claro),
+  os primeiros da lista *Janela › Interface Color Theme*; Dark, Light e High Contrast continuam
+  disponíveis. Os nomes `noite`/`dia` (e `night`/`day`) são aceitos pelo comando `window.brightness`.
 - Ícone do aplicativo (janela, barra de tarefas, executável do Windows, instalador) trocado pelo
   ícone do Layout em `assets/fisilab/`.
 

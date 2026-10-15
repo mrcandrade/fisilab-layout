@@ -367,7 +367,7 @@ pub fn tool_definitions() -> Vec<Value> {
             obj(
                 json!({
                     "panel": string("Panel: properties, pages, layers, swatches, paragraphStyles, characterStyles, stroke, character, paragraph, textWrap, links"),
-                    "brightness": {"type": "string", "enum": ["ufrgsNoite", "ufrgsDia", "dark", "mediumDark", "mediumLight", "light", "highContrast"]},
+                    "brightness": {"type": "string", "enum": ["dark", "mediumDark", "mediumLight", "light", "highContrast"]},
                     "rulers": {"type": "boolean"}, "guides": {"type": "boolean"}, "frameEdges": {"type": "boolean"},
                     "baselineGrid": {"type": "boolean"}, "textThreads": {"type": "boolean"},
                     "screenMode": {"type": "string", "enum": ["normal", "preview", "bleed", "slug", "presentation"]},

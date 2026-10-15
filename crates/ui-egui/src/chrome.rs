@@ -782,7 +782,7 @@ fn community_card(app: &mut DesignApp, ui: &mut egui::Ui) {
                     for (text, key) in crate::about::SUITE_LINKS {
                         let url = designcraft_engine::links::get(key).unwrap_or_default();
                         let l = ui
-                            .add(egui::Label::new(egui::RichText::new(text).size(12.0).color(t.focus).underline()).sense(Sense::click()))
+                            .add(egui::Label::new(egui::RichText::new(text).size(12.0).color(t.accent).underline()).sense(Sense::click()))
                             .on_hover_text(url)
                             .on_hover_cursor(egui::CursorIcon::PointingHand);
                         if l.clicked() {
