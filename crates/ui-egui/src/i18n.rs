@@ -709,8 +709,8 @@ const TABLE: &[(&str, [&str; 5])] = &[
         ["Spreads of up to 10 pages", "Spreads of up to 10 pages", "Spreads of up to 10 pages", "Spreads of up to 10 pages", "最多10页的跨页"],
     ),
     ("for", ["for", "pour", "por", "に対して", "行"]),
-    ("About FisiLayout", ["About FisiLayout", "About FisiLayout", "About FisiLayout", "About FisiLayout", "关于 FisiLayout"]),
-    ("Quit FisiLayout", ["FisiLayout beenden", "Quitter FisiLayout", "Salir de FisiLayout", "FisiLayout を終了", "退出 FisiLayout"]),
+    ("About Layout", ["About Layout", "About Layout", "About Layout", "About Layout", "关于 Layout"]),
+    ("Quit Layout", ["Layout beenden", "Quitter Layout", "Salir de Layout", "Layout を終了", "退出 Layout"]),
     ("Accept All Changes", ["Accept All Changes", "Accept All Changes", "Accept All Changes", "Accept All Changes", "接受所有更改"]),
     ("Activate Document", ["Activate Document", "Activate Document", "Activate Document", "Activate Document", "激活文档"]),
     ("Add Anchor Point", ["Add Anchor Point", "Add Anchor Point", "Add Anchor Point", "Add Anchor Point", "添加锚点"]),
@@ -1524,7 +1524,7 @@ const TABLE: &[(&str, [&str; 5])] = &[
         ["Cross-Reference Format", "Cross-Reference Format", "Cross-Reference Format", "Cross-Reference Format", "交叉引用格式"],
     ),
     ("Delete Workspace", ["Delete Workspace", "Delete Workspace", "Delete Workspace", "Delete Workspace", "删除工作区"]),
-    ("FisiLayout", ["FisiLayout", "FisiLayout", "FisiLayout", "FisiLayout", "FisiLayout"]),
+    ("FisiLab Layout", ["FisiLab Layout", "FisiLab Layout", "FisiLab Layout", "FisiLab Layout", "FisiLab Layout"]),
     ("Display Performance", ["Display Performance", "Display Performance", "Display Performance", "Display Performance", "显示性能"]),
     ("Document Grid", ["Document Grid", "Document Grid", "Document Grid", "Document Grid", "文档网格"]),
     (
@@ -1834,8 +1834,8 @@ const TABLE: &[(&str, [&str; 5])] = &[
     ("Utilities", ["Utilities", "Utilities", "Utilities", "Utilities", "实用程序"]),
     ("Variable Font", ["Variable Font", "Variable Font", "Variable Font", "Variable Font", "可变字体"]),
     (
-        "Welcome to FisiLayout",
-        ["Welcome to FisiLayout", "Welcome to FisiLayout", "Welcome to FisiLayout", "Welcome to FisiLayout", "欢迎使用 FisiLayout"],
+        "Welcome to Layout",
+        ["Welcome to Layout", "Welcome to Layout", "Welcome to Layout", "Welcome to Layout", "欢迎使用 Layout"],
     ),
     ("When Scaling", ["When Scaling", "When Scaling", "When Scaling", "When Scaling", "缩放时"]),
     ("[Basic] (working) ▾", ["[Basic] (working) ▾", "[Basic] (working) ▾", "[Basic] (working) ▾", "[Basic] (working) ▾", "[基本] (工作区) ▾"]),
@@ -2932,6 +2932,12 @@ mod tests {
         assert_eq!(tr("it", "Edit"), "Modifica");
         assert_eq!(tr("it", "New Document…"), "Nuovo documento…");
         assert_eq!(tr("it", "Unknown label"), "Unknown label");
+        // Suíte FisiLab: the program name has its own key, so the Layout menu keeps its translations.
+        assert_eq!(tr("ja", "Layout"), "レイアウト");
+        assert_eq!(tr("ar", "Layout"), "تخطيط");
+        assert_eq!(tr("uk", "Layout"), "Макет");
+        assert_eq!(tr("es", "Layout"), "Maquetación");
+        assert_eq!(tr("ja", "FisiLab Layout"), "FisiLab Layout");
         assert!(is_rtl("ar"));
         for (i, (en, translation)) in ar::TABLE.iter().enumerate() {
             assert!(ar::TABLE[..i].iter().all(|(key, _)| key != en), "duplicate {en}");

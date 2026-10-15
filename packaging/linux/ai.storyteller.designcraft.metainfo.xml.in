@@ -19,8 +19,8 @@
   <icon type="stock">ai.storyteller.designcraft</icon>
   <!-- Only url types known to appstream 0.15 (Ubuntu 22.04, where CI validates): no vcs-browser. -->
   <url type="homepage">https://github.com/mrcandrade/larfic/tree/main/suite-fisilab</url>
-  <url type="bugtracker">https://github.com/mrcandrade/fisilayout/issues</url>
-  <url type="help">https://github.com/mrcandrade/fisilayout</url>
+  <url type="bugtracker">https://github.com/mrcandrade/fisilab-layout/issues</url>
+  <url type="help">https://github.com/mrcandrade/fisilab-layout</url>
   <categories>
     <category>Graphics</category>
     <category>RasterGraphics</category>

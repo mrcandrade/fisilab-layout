@@ -1,4 +1,4 @@
-//! `fisilayout-cli perf` / `bench`: the performance budgets (plan/architecture.md §9) measured on
+//! `fisilab-layout-cli perf` / `bench`: the performance budgets (plan/architecture.md §9) measured on
 //! a synthetic stress document, or on a given file.
 //!
 //! Each row is the median of several runs. Timings are wall-clock: on a busy machine (load
@@ -544,7 +544,7 @@ fn header() -> (usize, bool) {
     (cores, noisy)
 }
 
-/// `fisilayout-cli perf [--pages N] [--frames N] [--chars N] [--images N] [--runs N] [--strict]`.
+/// `fisilab-layout-cli perf [--pages N] [--frames N] [--chars N] [--images N] [--runs N] [--strict]`.
 pub fn perf(args: &[String]) -> Result<(), String> {
     let mut spec = Spec::default();
     let mut runs = 7usize;
@@ -567,7 +567,7 @@ pub fn perf(args: &[String]) -> Result<(), String> {
     let doc = synthetic(&spec)?;
     let frames = spec.pages * spec.frames_per_page;
     outln!(
-        "FisiLayout performance budgets — synthetic: {} pages, {frames} text frames in {} threaded stories, {}k chars, {} images ({} assets), {} gradients (built in {:.0} ms)",
+        "FisiLab Layout performance budgets — synthetic: {} pages, {frames} text frames in {} threaded stories, {}k chars, {} images ({} assets), {} gradients (built in {:.0} ms)",
         spec.pages,
         doc.stories.len(),
         doc.stories.values().map(|s| s.text.len()).sum::<usize>() / 1000,
@@ -582,7 +582,7 @@ pub fn perf(args: &[String]) -> Result<(), String> {
     if strict && over > 0 && !noisy { Err(format!("{over} budget(s) exceeded")) } else { Ok(()) }
 }
 
-/// `fisilayout-cli bench FILE [--runs N]`: the same measurements on one document.
+/// `fisilab-layout-cli bench FILE [--runs N]`: the same measurements on one document.
 pub fn bench(args: &[String]) -> Result<(), String> {
     let mut file = None;
     let mut runs = 5usize;
@@ -594,7 +594,7 @@ pub fn bench(args: &[String]) -> Result<(), String> {
             other => return Err(format!("unknown bench option `{other}`")),
         }
     }
-    let file = file.ok_or("usage: fisilayout-cli bench FILE [--runs N]")?;
+    let file = file.ok_or("usage: fisilab-layout-cli bench FILE [--runs N]")?;
     let (_, noisy) = header();
     let mut s = designcraft_engine::Session::new();
     let t = Instant::now();

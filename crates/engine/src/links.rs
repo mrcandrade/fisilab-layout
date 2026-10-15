@@ -1,23 +1,23 @@
 //! Suíte FisiLab and project links (Help menu, About, start screen, CLI, MCP).
 //!
-//! FisiLayout is the Suíte FisiLab (FisiLab — LARFIC · UFRGS, with the CTA) build of DesignCraft.
+//! FisiLab Layout is the Suíte FisiLab (FisiLab — LARFIC · UFRGS, with the CTA) build of DesignCraft.
 //! The upstream community links were replaced by the suite's; the original project keeps its
 //! credit link. The URLs mirror `fisilab_brand` (which this layer can't depend on: it uses egui).
 
 use serde_json::{Value, json};
 
 /// The app's slug in the Suíte FisiLab.
-pub const APP: &str = "fisilayout";
+pub const APP: &str = "fisilab-layout";
 /// The Suíte FisiLab page (source code, installers, credits).
 pub const SUITE: &str = "https://github.com/mrcandrade/larfic/tree/main/suite-fisilab";
 /// The manifesto for free technologies.
 pub const MANIFESTO: &str = "https://github.com/mrcandrade/larfic/blob/main/suite-fisilab/MANIFESTO.md";
 /// The original project (DesignCraft, by the ArtCraft Team and contributors).
 pub const UPSTREAM: &str = "https://github.com/storytold/designcraft";
-/// FisiLayout's source repository.
-pub const GITHUB: &str = "https://github.com/mrcandrade/fisilayout";
+/// FisiLab Layout's source repository.
+pub const GITHUB: &str = "https://github.com/mrcandrade/fisilab-layout";
 /// Where to report bugs and request features.
-pub const ISSUES: &str = "https://github.com/mrcandrade/fisilayout/issues";
+pub const ISSUES: &str = "https://github.com/mrcandrade/fisilab-layout/issues";
 
 /// Every link key, in display order.
 pub const KEYS: [&str; 5] = ["suite", "manifesto", "upstream", "github", "issues"];

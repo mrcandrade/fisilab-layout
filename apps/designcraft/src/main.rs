@@ -1,6 +1,6 @@
-//! FisiLayout desktop app (Suíte FisiLab, UFRGS), based on DesignCraft.
+//! FisiLab Layout desktop app (Suíte FisiLab, UFRGS), based on DesignCraft.
 //!
-//! Usage: `fisilayout [--control <port>] [--sample] [files…]`
+//! Usage: `fisilab-layout [--control <port>] [--sample] [files…]`
 //!
 //! `--control <port>` (or `DESIGNCRAFT_CONTROL_PORT`) starts a localhost JSON-lines control server:
 //! `{"id":1,"method":"ui.inspect","params":{}}` → `{"id":1,"ok":true,"result":…}`.
@@ -66,7 +66,7 @@ impl eframe::App for App {
         }
         if let Err(e) = preserve_documents_on_exit(&mut self.app) {
             log::error!("Couldn't preserve documents on exit: {e}");
-            eprintln!("fisilayout: couldn't preserve documents on exit: {e}");
+            eprintln!("fisilab-layout: couldn't preserve documents on exit: {e}");
         }
         save_prefs(&self.app);
     }
@@ -191,8 +191,8 @@ fn open_filters(purpose: &str) -> &'static [OpenFilter] {
             OpenFilter { name: "Video and sound", extensions: &["mp4", "m4v", "mov", "webm", "mp3", "m4a", "wav", "ogg"] },
         ],
         _ => &[
-            OpenFilter { name: "FisiLayout or IDML", extensions: &["designcraft", "idml"] },
-            OpenFilter { name: "FisiLayout (.designcraft)", extensions: &["designcraft"] },
+            OpenFilter { name: "FisiLab Layout or IDML", extensions: &["designcraft", "idml"] },
+            OpenFilter { name: "FisiLab Layout (.designcraft)", extensions: &["designcraft"] },
             OpenFilter { name: "InDesign Markup (IDML)", extensions: &["idml"] },
         ],
     }
@@ -217,14 +217,14 @@ fn services() -> Services {
 
 /// Desktop app ID: the Linux `.desktop` file name and hicolor icon name (Wayland matches windows by it).
 /// Suíte FisiLab: its own id, so it never collides with an installed DesignCraft.
-const APP_ID: &str = "br.ufrgs.fisilab.fisilayout";
+const APP_ID: &str = "br.ufrgs.fisilab.layout";
 
-/// The window, Dock, taskbar and Alt-Tab icon: the Suíte FisiLab icon of FisiLayout.
+/// The window, Dock, taskbar and Alt-Tab icon: the Suíte FisiLab icon of Layout.
 fn app_icon() -> Option<egui::IconData> {
     #[cfg(target_os = "macos")]
-    let png: &[u8] = include_bytes!("../../../assets/fisilab/fisilayout-512.png");
+    let png: &[u8] = include_bytes!("../../../assets/fisilab/fisilab-layout-512.png");
     #[cfg(not(target_os = "macos"))]
-    let png: &[u8] = include_bytes!("../../../assets/fisilab/fisilayout-256.png");
+    let png: &[u8] = include_bytes!("../../../assets/fisilab/fisilab-layout-256.png");
     eframe::icon_data::from_png_bytes(png).map_err(|e| log::warn!("app icon: {e}")).ok()
 }
 
@@ -252,7 +252,7 @@ fn main() -> eframe::Result {
             "--control" => control_port = control_port_from("--control", args.next()),
             "--sample" => sample = true,
             "--version" => {
-                println!("fisilayout {} (Suíte FisiLab; baseado no DesignCraft)", env!("CARGO_PKG_VERSION"));
+                println!("fisilab-layout {} (Suíte FisiLab; baseado no DesignCraft)", env!("CARGO_PKG_VERSION"));
                 return Ok(());
             }
             _ => files.push(a),
@@ -262,14 +262,14 @@ fn main() -> eframe::Result {
     // leaves no file behind. Records logged until now are written to it first.
     if let (Some(logger), Some(dir)) = (logger, profile::config_dir()) {
         match logger.attach_dir(&dir.join("logs")) {
-            Ok(path) => log::info!("FisiLayout {}, log file {}", env!("CARGO_PKG_VERSION"), path.display()),
+            Ok(path) => log::info!("FisiLab Layout {}, log file {}", env!("CARGO_PKG_VERSION"), path.display()),
             // Standard error only by now (`attach_dir` gave up on the file); unlike `eprintln!`, never panics.
             Err(e) => log::warn!("no log file: {e}"),
         }
     }
     let mut options = eframe::NativeOptions {
         viewport: egui::ViewportBuilder::default()
-            .with_title("FisiLayout")
+            .with_title("Layout")
             .with_inner_size([1440.0, 900.0])
             .with_min_inner_size([900.0, 560.0])
             .with_drag_and_drop(true)
@@ -312,7 +312,7 @@ fn main() -> eframe::Result {
     // Suíte FisiLab: the CTA splash on the first frames (FISILAB_NO_SPLASH=1 turns it off).
     fisilab_brand::splash::enable();
     eframe::run_native(
-        "FisiLayout",
+        "Layout",
         options,
         Box::new(move |cc| {
             let mut gpu = gpu;
@@ -350,7 +350,7 @@ fn main() -> eframe::Result {
             }
             for f in files {
                 if let Err(e) = app.open_file("file.open", serde_json::json!({"path": f})) {
-                    eprintln!("fisilayout: {f}: {e}");
+                    eprintln!("fisilab-layout: {f}: {e}");
                 }
             }
             Ok(Box::new(App {

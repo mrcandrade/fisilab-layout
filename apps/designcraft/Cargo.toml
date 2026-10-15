@@ -5,14 +5,14 @@ edition.workspace = true
 rust-version.workspace = true
 license.workspace = true
 publish = false
-default-run = "fisilayout"
+default-run = "fisilab-layout"
 
 [lints]
 workspace = true
 
-# Suíte FisiLab: the GUI is fisilayout.exe (the package name stays `designcraft`).
+# Suíte FisiLab: the GUI is fisilab-layout.exe (the package name stays `designcraft`).
 [[bin]]
-name = "fisilayout"
+name = "fisilab-layout"
 path = "src/main.rs"
 
 [dependencies]

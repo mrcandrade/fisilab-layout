@@ -13,10 +13,10 @@ fn config_dir_with(os: &str, env: impl Fn(&str) -> Option<OsString>) -> Option<P
         return (!root.is_empty()).then(|| PathBuf::from(root));
     }
     match os {
-        "macos" => env("HOME").map(|p| PathBuf::from(p).join("Library/Application Support/FisiLayout")),
-        "windows" => env("APPDATA").map(|p| PathBuf::from(p).join("FisiLayout")),
+        "macos" => env("HOME").map(|p| PathBuf::from(p).join("Library/Application Support/FisiLab Layout")),
+        "windows" => env("APPDATA").map(|p| PathBuf::from(p).join("FisiLab Layout")),
         _ => {
-            env("XDG_CONFIG_HOME").map(PathBuf::from).or_else(|| env("HOME").map(|p| PathBuf::from(p).join(".config"))).map(|p| p.join("fisilayout"))
+            env("XDG_CONFIG_HOME").map(PathBuf::from).or_else(|| env("HOME").map(|p| PathBuf::from(p).join(".config"))).map(|p| p.join("fisilab-layout"))
         }
     }
 }
@@ -74,10 +74,10 @@ mod tests {
 
     #[test]
     fn unset_override_preserves_existing_platform_paths() {
-        assert_eq!(config_dir_with("macos", environment), Some("/user/Library/Application Support/FisiLayout".into()));
-        assert_eq!(config_dir_with("windows", environment), Some("/roaming/FisiLayout".into()));
-        assert_eq!(config_dir_with("linux", environment), Some("/xdg-config/fisilayout".into()));
-        assert_eq!(config_dir_with("linux", |key| if key == "HOME" { environment(key) } else { None }), Some("/user/.config/fisilayout".into()));
+        assert_eq!(config_dir_with("macos", environment), Some("/user/Library/Application Support/FisiLab Layout".into()));
+        assert_eq!(config_dir_with("windows", environment), Some("/roaming/FisiLab Layout".into()));
+        assert_eq!(config_dir_with("linux", environment), Some("/xdg-config/fisilab-layout".into()));
+        assert_eq!(config_dir_with("linux", |key| if key == "HOME" { environment(key) } else { None }), Some("/user/.config/fisilab-layout".into()));
         assert_eq!(recovery_dir_with(None, || Some("/existing/recovery".into())), Some("/existing/recovery".into()));
     }
 

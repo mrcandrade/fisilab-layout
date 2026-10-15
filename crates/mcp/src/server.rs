@@ -18,7 +18,7 @@ const INVALID_PARAMS: i64 = -32602;
 const INTERNAL_ERROR: i64 = -32603;
 const RESOURCE_NOT_FOUND: i64 = -32002;
 
-const INSTRUCTIONS: &str = "FisiLayout (Suíte FisiLab, UFRGS; based on DesignCraft) is a page-layout app (an InDesign clone). Coordinates are points in spread \
+const INSTRUCTIONS: &str = "FisiLab Layout (Suíte FisiLab, UFRGS; based on DesignCraft) is a page-layout app (an InDesign clone). Coordinates are points in spread \
 space (y down; on a single-page spread the page's top-left is (0,0); a default Letter page is 612×792). Every action \
 is a command: find ids and parameters with list_commands and run them with execute (or several with batch). Typical \
 flow: new_document → execute frame.create {rect:[x0,y0,x1,y1], content:\"text\", text:\"…\"} → set_story_text / \
@@ -134,7 +134,7 @@ impl Server {
                 Ok(json!({
                     "protocolVersion": version,
                     "capabilities": {"tools": {}, "resources": {}},
-                    "serverInfo": {"name": "fisilayout", "title": "FisiLayout", "version": env!("CARGO_PKG_VERSION"), "websiteUrl": designcraft_engine::links::GITHUB},
+                    "serverInfo": {"name": "fisilab-layout", "title": "FisiLab Layout", "version": env!("CARGO_PKG_VERSION"), "websiteUrl": designcraft_engine::links::GITHUB},
                     "instructions": format!(
                         "{INSTRUCTIONS} Backend: {}. Links: {} (Suíte FisiLab), {} (source), {} (original DesignCraft project). The `app.links` command returns these links.",
                         self.backend.describe(),

@@ -37,10 +37,10 @@ use serde_json::{Value, json};
 
 pub use control::{ControlRequest, ControlResponse};
 
-/// FisiLayout in the Suíte FisiLab (FisiLab — LARFIC · UFRGS, with the CTA): what the brand's
+/// Layout in the Suíte FisiLab (FisiLab — LARFIC · UFRGS, with the CTA): what the brand's
 /// splash and "Sobre a Suíte FisiLab" window say about this app.
 pub const APP_INFO: fisilab_brand::AppInfo = fisilab_brand::AppInfo {
-    name: "FisiLayout",
+    name: "Layout",
     tagline: "Diagramação e editoração",
     equivalent: "Adobe InDesign",
     version: env!("CARGO_PKG_VERSION"),
@@ -291,7 +291,7 @@ pub struct UiState {
     /// Where the Contextual Task Bar was last shown, like [`Self::task_bar_pin`].
     #[serde(skip)]
     pub task_bar_at: Option<[f32; 2]>,
-    /// Help › About FisiLayout is open.
+    /// Help › About Layout is open.
     pub about: bool,
     /// Help › Sobre a Suíte FisiLab was chosen: the brand window opens on the next frame.
     #[serde(skip)]

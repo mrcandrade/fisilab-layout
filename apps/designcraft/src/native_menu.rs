@@ -36,12 +36,12 @@ impl NativeMenu {
         let mut items = HashMap::new();
         let mut counter = 0usize;
         // Application menu.
-        let app_menu = Submenu::new("FisiLayout", true);
+        let app_menu = Submenu::new("FisiLab Layout", true);
         // Our own About window (with the Suíte FisiLab links) instead of the stock panel.
-        let about = MenuItem::with_id("dc-about", "About FisiLayout", true, None);
+        let about = MenuItem::with_id("dc-about", "About Layout", true, None);
         let fisilab = MenuItem::with_id("dc-fisilab", fisilab_brand::ABOUT_MENU_LABEL, true, None);
         // Not the predefined Quit: it terminates the app at once, past the unsaved-changes prompt.
-        let quit = MenuItem::with_id("dc-quit", designcraft_ui_egui::i18n::tr(&app.ui.language, "Quit FisiLayout"), true, accel("Cmd+Q"));
+        let quit = MenuItem::with_id("dc-quit", designcraft_ui_egui::i18n::tr(&app.ui.language, "Quit Layout"), true, accel("Cmd+Q"));
         let _ = app_menu.append_items(&[
             &about,
             &fisilab,

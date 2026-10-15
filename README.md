@@ -1,8 +1,8 @@
 <p align="center">
-  <img src="assets/fisilab/fisilayout-256.png" alt="Ícone do FisiLayout" width="128">
+  <img src="assets/fisilab/fisilab-layout-256.png" alt="Ícone do Layout" width="128">
 </p>
 
-<h1 align="center">FisiLayout</h1>
+<h1 align="center">Layout · Suíte FisiLab</h1>
 
 <p align="center">
   <b>Diagramação e editoração</b><br>
@@ -16,7 +16,7 @@
 
 <p align="center">
   Parte da <a href="https://github.com/mrcandrade/larfic/tree/main/suite-fisilab">Suíte FisiLab</a> ·
-  <a href="https://github.com/mrcandrade/fisilayout/issues">Reportar um problema</a>
+  <a href="https://github.com/mrcandrade/fisilab-layout/issues">Reportar um problema</a>
 </p>
 
 ## O que faz
@@ -34,9 +34,9 @@
   e exportação para PNG, PDF (PDF/X-4, PDF/A-2b) e EPUB. Sem assinatura, sem servidor de licenças,
   sem telemetria.
 - **Automatizável:** todo item de menu, ferramenta, painel e diálogo pode ser acionado por um canal
-  de controle JSON e por um **servidor MCP**; há também uma linha de comando (`fisilayout-cli`) para
+  de controle JSON e por um **servidor MCP**; há também uma linha de comando (`fisilab-layout-cli`) para
   renderizar, exportar e rodar scripts de comandos sem abrir a janela.
-- **Revista de exemplo:** *Ajuda › Documento de exemplo* (ou `fisilayout --sample`) abre uma revista inteira montada pelo
+- **Revista de exemplo:** *Ajuda › Documento de exemplo* (ou `fisilab-layout --sample`) abre uma revista inteira montada pelo
   próprio programa, para explorar os recursos.
 - **Interface em português do Brasil** (padrão), além de inglês, alemão, francês, espanhol,
   japonês, chinês, árabe, italiano e ucraniano; temas de cores **UFRGS Noite** (padrão) e
@@ -46,29 +46,29 @@
 
 ### Windows
 
-Baixe o instalador `FisiLayout-Setup-<versão>.exe` no portal de downloads da
+Baixe o instalador `FisiLab-Layout-Setup-<versão>.exe` no portal de downloads da
 [Suíte FisiLab](https://github.com/mrcandrade/larfic/tree/main/suite-fisilab) ou na página de
-[Releases do `mrcandrade/fisilayout`](https://github.com/mrcandrade/fisilayout/releases) e execute-o.
+[Releases do `mrcandrade/fisilab-layout`](https://github.com/mrcandrade/fisilab-layout/releases) e execute-o.
 
 ### Compilar a partir do código
 
 É preciso o [Rust](https://rustup.rs) 1.95 ou mais recente.
 
 ```sh
-git clone https://github.com/mrcandrade/fisilayout
-cd fisilayout
-cargo run --release -p designcraft                          # o aplicativo (fisilayout)
+git clone https://github.com/mrcandrade/fisilab-layout
+cd fisilab-layout
+cargo run --release -p designcraft                          # o aplicativo (fisilab-layout)
 cargo run --release -p designcraft -- --sample              # abre a revista de exemplo
-cargo run --release -p designcraft-cli -- --help            # a linha de comando (fisilayout-cli)
-cargo build --release -p designcraft -p designcraft-cli     # gera target/release/fisilayout e fisilayout-cli
+cargo run --release -p designcraft-cli -- --help            # a linha de comando (fisilab-layout-cli)
+cargo build --release -p designcraft -p designcraft-cli     # gera target/release/fisilab-layout e fisilab-layout-cli
 ```
 
 Os nomes dos pacotes Cargo continuam os do projeto original (`designcraft`, `designcraft-cli`);
-os executáveis gerados se chamam `fisilayout` e `fisilayout-cli`.
+os executáveis gerados se chamam `fisilab-layout` e `fisilab-layout-cli`.
 
 ## Créditos
 
-O FisiLayout é uma versão modificada do **[DesignCraft](https://github.com/storytold/designcraft)**,
+O Layout é uma versão modificada do **[DesignCraft](https://github.com/storytold/designcraft)**,
 criado pela **ArtCraft Team e contribuidores**, distribuído sob a licença MIT ou Apache 2.0, à
 escolha de quem o usa ([LICENSE-MIT](LICENSE-MIT), [LICENSE-APACHE](LICENSE-APACHE)). Todo o
 trabalho de diagramação, tipografia, formatos de arquivo e ferramentas é deles; o FisiLab alterou o

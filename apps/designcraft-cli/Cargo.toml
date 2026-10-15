@@ -4,14 +4,14 @@ version.workspace = true
 edition.workspace = true
 license.workspace = true
 publish = false
-default-run = "fisilayout-cli"
+default-run = "fisilab-layout-cli"
 
 [lints]
 workspace = true
 
-# Suíte FisiLab: the CLI is fisilayout-cli.exe (the package name stays `designcraft-cli`).
+# Suíte FisiLab: the CLI is fisilab-layout-cli.exe (the package name stays `designcraft-cli`).
 [[bin]]
-name = "fisilayout-cli"
+name = "fisilab-layout-cli"
 path = "src/main.rs"
 
 [dependencies]

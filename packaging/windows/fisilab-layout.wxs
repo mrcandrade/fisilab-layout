@@ -1,0 +1,65 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+  FisiLab Layout MSI (Suíte FisiLab; WiX Toolset v5: `dotnet tool install -g wix`). Built by package.ps1:
+
+    wix build fisilab-layout.wxs -arch x64 -d Version=1.2.3 -d BinDir=... -d IconPath=... -o out.msi
+
+  Per-machine install into Program Files\Suite FisiLab\Layout and a Start Menu shortcut. No file associations are
+  registered (the upstream DesignCraft MSI registered none either). The suite itself ships an Inno
+  Setup installer built elsewhere; this MSI is kept for parity with the upstream packaging.
+  UpgradeCode and component GUIDs differ from DesignCraft's, so it never upgrades or removes an
+  upstream install.
+-->
+<Wix xmlns="http://wixtoolset.org/schemas/v4/wxs">
+  <Package
+      Name="FisiLab Layout"
+      Manufacturer="FisiLab — LARFIC/UFRGS"
+      Version="$(var.Version)"
+      UpgradeCode="26F02BAF-4595-41B8-BA63-0E9415065322"
+      Scope="perMachine"
+      Compressed="yes"
+      Language="1046"
+      Codepage="65001">
+    <SummaryInformation Description="Layout — Diagramação e editoração (Suíte FisiLab)" Manufacturer="FisiLab — LARFIC/UFRGS" />
+    <!-- Same-version upgrades let successive pre-releases of one X.Y.Z replace each other
+         (MSI versions are numeric, so 1.2.3-rc.1 and 1.2.3-rc.2 are both 1.2.3). -->
+    <MajorUpgrade AllowSameVersionUpgrades="yes"
+        DowngradeErrorMessage="Uma versão mais nova do FisiLab Layout já está instalada." />
+    <MediaTemplate EmbedCab="yes" CompressionLevel="high" />
+
+    <Icon Id="FisilabLayoutIcon.ico" SourceFile="$(var.IconPath)" />
+    <Property Id="ARPPRODUCTICON" Value="FisilabLayoutIcon.ico" />
+    <Property Id="ARPURLINFOABOUT" Value="https://github.com/mrcandrade/larfic/tree/main/suite-fisilab" />
+    <Property Id="ARPURLUPDATEINFO" Value="https://github.com/mrcandrade/fisilab-layout/releases" />
+    <Property Id="ARPHELPLINK" Value="https://github.com/mrcandrade/fisilab-layout/issues" />
+
+    <StandardDirectory Id="ProgramFiles6432Folder">
+      <Directory Id="SuiteFisiLabFolder" Name="Suite FisiLab">
+        <Directory Id="INSTALLFOLDER" Name="Layout" />
+      </Directory>
+    </StandardDirectory>
+    <StandardDirectory Id="ProgramMenuFolder" />
+
+    <Feature Id="Main" Title="FisiLab Layout" Level="1">
+      <ComponentGroupRef Id="FisilabLayoutFiles" />
+    </Feature>
+  </Package>
+
+  <Fragment>
+    <ComponentGroup Id="FisilabLayoutFiles" Directory="INSTALLFOLDER">
+      <Component Id="FisilabLayoutApp" Guid="5009D570-4A2D-456E-9F20-61ED7C5D19CD">
+        <File Id="FisilabLayoutExe" Source="$(var.BinDir)\fisilab-layout.exe" KeyPath="yes">
+          <Shortcut Id="StartMenuShortcut" Directory="ProgramMenuFolder" Name="FisiLab Layout"
+              Description="Layout — Diagramação e editoração (Suíte FisiLab)" WorkingDirectory="INSTALLFOLDER" Advertise="yes"
+              Icon="FisilabLayoutIcon.ico" IconIndex="0" />
+        </File>
+
+        <RegistryValue Root="HKLM" Key="Software\Microsoft\Windows\CurrentVersion\App Paths\fisilab-layout.exe" Value="[#FisilabLayoutExe]" Type="string" />
+      </Component>
+
+      <Component Id="FisilabLayoutCli">
+        <File Id="FisilabLayoutCliExe" Source="$(var.BinDir)\fisilab-layout-cli.exe" KeyPath="yes" />
+      </Component>
+    </ComponentGroup>
+  </Fragment>
+</Wix>

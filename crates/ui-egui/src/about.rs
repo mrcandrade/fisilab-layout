@@ -1,4 +1,4 @@
-//! Help › About FisiLayout: tabs About · Contributors · Models. About shows the app icon, version,
+//! Help › About Layout: tabs About · Contributors · Models. About shows the app icon, version,
 //! the credit to the original project (DesignCraft) and the Suíte FisiLab links; Contributors and
 //! Models are the compiled-in credits of the upstream project (`crate::credits`).
 //!
@@ -16,19 +16,19 @@ use crate::theme::{Tokens, semibold};
 /// The About window's tabs, in `UiState::about_tab` order (`help.about {tab}` names them in lowercase).
 pub const ABOUT_TABS: [&str; 3] = ["About", "Contributors", "Models"];
 
-/// The FisiLayout app icon (Suíte FisiLab), decoded once and cached.
-const APP_ICON_PNG: &[u8] = include_bytes!("../../../assets/fisilab/fisilayout-128.png");
+/// The Layout app icon (Suíte FisiLab), decoded once and cached.
+const APP_ICON_PNG: &[u8] = include_bytes!("../../../assets/fisilab/fisilab-layout-128.png");
 
-/// Paint the FisiLayout icon into `rect` (square). Nothing is painted if it can't be decoded.
+/// Paint the Layout icon into `rect` (square). Nothing is painted if it can't be decoded.
 pub fn paint_app_icon(ui: &egui::Ui, rect: Rect) {
     let ctx = ui.ctx();
-    let key = egui::Id::new("fisilayout_app_icon");
+    let key = egui::Id::new("fisilab_layout_app_icon");
     let cached: Option<Option<egui::TextureHandle>> = ctx.data(|d| d.get_temp(key));
     let tex = cached.unwrap_or_else(|| {
         let t = designcraft_images::decode_rgba(APP_ICON_PNG).map(|img| {
             let size = [img.width() as usize, img.height() as usize];
             let ci = egui::ColorImage::from_rgba_unmultiplied(size, img.as_raw());
-            ctx.load_texture("fisilayout_app_icon", ci, egui::TextureOptions::LINEAR)
+            ctx.load_texture("fisilab_layout_app_icon", ci, egui::TextureOptions::LINEAR)
         });
         ctx.data_mut(|d| d.insert_temp(key, t.clone()));
         t
@@ -96,7 +96,7 @@ pub fn show(app: &mut DesignApp, ctx: &egui::Context) {
             ui.add_space(6.0);
             ui.label(crate::rtl::widget(
                 ui,
-                egui::RichText::new(crate::i18n::tr(&app.ui.language, "FisiLayout")).font(semibold(26.0)).color(t.text_strong),
+                egui::RichText::new(crate::i18n::tr(&app.ui.language, "FisiLab Layout")).font(semibold(26.0)).color(t.text_strong),
             ));
             crate::rtl::label(
                 ui,

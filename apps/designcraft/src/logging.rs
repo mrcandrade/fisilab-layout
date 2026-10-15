@@ -33,7 +33,7 @@ pub const MAX_FILE_BYTES: u64 = 16 * 1024 * 1024;
 /// Records kept in memory until the log file is attached.
 pub const MAX_PENDING: usize = 512;
 /// The built-in filter when `RUST_LOG` is unset or empty.
-pub const DEFAULT_FILTER: &str = "warn,designcraft*=info,fisilayout*=info";
+pub const DEFAULT_FILTER: &str = "warn,designcraft*=info,fisilab_layout*=info";
 
 /// Per-target level filter parsed from env_logger-style directives.
 #[derive(Clone, Debug, PartialEq, Eq)]
@@ -273,6 +273,7 @@ mod tests {
         let f = Filter::parse(DEFAULT_FILTER);
         assert_eq!(f.level_for("designcraft"), LevelFilter::Info);
         assert_eq!(f.level_for("designcraft::control_server"), LevelFilter::Info);
+        assert_eq!(f.level_for("fisilab_layout::control_server"), LevelFilter::Info);
         assert_eq!(f.level_for("designcraft_render::tile"), LevelFilter::Info);
         assert_eq!(f.level_for("wgpu_core::device"), LevelFilter::Warn);
         assert_eq!(f.level_for("naga"), LevelFilter::Warn);

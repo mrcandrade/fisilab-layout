@@ -1,6 +1,6 @@
 > **Nota (Suíte FisiLab):** este é o README original do DesignCraft, mantido como registro histórico.
 > A logo/wordmark do ArtCraft foi removida (marca registrada não coberta pela licença). O README do
-> FisiLayout está em [README.md](README.md).
+> Layout está em [README.md](README.md).
 
 
 <h1 align="center">DesignCraft</h1>
