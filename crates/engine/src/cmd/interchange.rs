@@ -122,13 +122,8 @@ pub(crate) fn resolve_packaged_links(document: &mut Document, dir: Option<&std::
     }
 }
 
-/// Remote, UNC and device paths (`\\host\share`, `//host/share`, `\\?\…`, `\\.\…`). Touching one
-/// can leak NTLM credentials over SMB, so a link like that is never opened, not even to test it.
 #[cfg(not(target_arch = "wasm32"))]
-fn is_remote_or_device_path(link: &str) -> bool {
-    let mut chars = link.chars();
-    matches!((chars.next(), chars.next()), (Some('/' | '\\'), Some('/' | '\\')))
-}
+use super::links::is_remote_or_device_path;
 
 /// A linked file is only read from the folder of the opened document or below it, so a crafted
 /// IDML cannot pull arbitrary local files into the document. Anything else counts as missing.

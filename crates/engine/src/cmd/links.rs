@@ -88,9 +88,20 @@ fn uses(d: &Document, aid: AssetId) -> Vec<ItemId> {
     out
 }
 
+/// Remote, UNC and device paths (`\\host\\share`, `//host/share`, `\\?\\…`, `\\.\\…`). Even a metadata
+/// call on one can leak NTLM credentials over SMB, so a path that came from a document and looks
+/// like this is never touched: it counts as missing, without any filesystem call.
+pub(crate) fn is_remote_or_device_path(path: &str) -> bool {
+    let mut chars = path.chars();
+    matches!((chars.next(), chars.next()), (Some('/' | '\\'), Some('/' | '\\')))
+}
+
 /// Link status of an asset.
 pub fn status(a: &designcraft_doc::Asset) -> &'static str {
     let Some(path) = &a.link else { return "embedded" };
+    if is_remote_or_device_path(path) {
+        return "missing";
+    }
     #[cfg(not(target_arch = "wasm32"))]
     {
         match std::fs::metadata(path) {
@@ -145,6 +156,9 @@ fn list(d: &Document) -> Vec<Value> {
 
 #[cfg(not(target_arch = "wasm32"))]
 fn reload(path: &str) -> Result<(Vec<u8>, (u32, u32))> {
+    if is_remote_or_device_path(path) {
+        return Err(bad("links", format!("{path}: remote and device paths are not opened")));
+    }
     let b = std::fs::read(path).map_err(|e| EngineError::Other(format!("{path}: {e}")))?;
     let px = designcraft_render::image_size(&b).ok_or_else(|| bad("links", format!("{path}: unsupported or corrupt image")))?;
     Ok((b, px))
@@ -194,7 +208,7 @@ fn relink_folder(s: &mut Session, p: &Value) -> Result<Value> {
         }
         let folder = dir.clone().or_else(|| old.parent().map(|p| p.to_path_buf())).unwrap_or_default();
         let cand = folder.join(&name);
-        if cand.exists() {
+        if !is_remote_or_device_path(&cand.to_string_lossy()) && cand.exists() {
             todo.push((a.id, cand));
         } else {
             not_found.push(name.to_string_lossy().to_string());
@@ -243,6 +257,18 @@ mod tests {
 
     fn png(w: u32, h: u32) -> Vec<u8> {
         designcraft_render::Rendered { width: w, height: h, pixels: vec![200u8; (w * h * 4) as usize] }.to_png()
+    }
+
+    #[test]
+    fn remote_and_device_links_are_never_touched() {
+        let mut a = designcraft_doc::Asset { id: AssetId(1), name: "x.png".into(), mime: "image/png".into(), link: None, data: Arc::default(), pixels: None, page: 0 };
+        for link in ["//host/share/x.png", "\\\\host\\share\\x.png", "\\\\?\\C:\\x.png", "\\\\.\\pipe\\x"] {
+            a.link = Some(link.into());
+            assert_eq!(status(&a), "missing", "{link}");
+            assert!(reload(link).is_err(), "{link}");
+        }
+        a.link = None;
+        assert_eq!(status(&a), "embedded");
     }
 
     #[test]

@@ -120,3 +120,7 @@ mesmos termos (MIT OR Apache-2.0).
   recusado se comporta como vínculo ausente, sem abortar a importação.
 - **ZIP bombs:** a leitura das entradas do pacote IDML (e das partes do formato nativo) agora limita o tamanho
   descompactado: 512 MiB por entrada e 2 GiB por pacote IDML; acima disso a importação falha com erro.
+- **Vínculos remotos nunca são tocados:** `links.status`, `links.update`, `links.relink`/`relinkFolder` e a
+  resolução de vínculos na importação não fazem nenhuma chamada ao sistema de arquivos (nem `stat`) em
+  caminhos UNC, remotos ou de dispositivo (`\host\share`, `//host/share`, `\?\`, `\.\`); o vínculo
+  aparece como ausente. Isso evita vazamento de credenciais NTLM por SMB ao abrir um IDML manipulado.
