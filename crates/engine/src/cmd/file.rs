@@ -640,7 +640,7 @@ fn file_revert(s: &mut Session, _: &Value) -> Result<Value> {
     {
         let mut d = if path.to_ascii_lowercase().ends_with(".idml") {
             let bytes = std::fs::read(&path).map_err(|e| EngineError::Other(format!("{path}: {e}")))?;
-            designcraft_idml::import_idml(&bytes).map_err(|e| EngineError::Other(e.to_string()))?
+            super::interchange::import(&bytes, std::path::Path::new(&path).parent())?
         } else {
             from_bytes(&std::fs::read(&path).map_err(|e| EngineError::Other(format!("{path}: {e}")))?)?
         };

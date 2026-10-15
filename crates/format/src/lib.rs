@@ -87,13 +87,17 @@ pub fn load(bytes: &[u8]) -> Result<Document, FormatError> {
     load_legacy_json(bytes)
 }
 
+/// Most one part of a native document may decompress to.
+const MAX_PART_BYTES: u64 = 512 << 20;
+
 fn load_zip(bytes: &[u8]) -> Result<Document, FormatError> {
     let mut z = zip::ZipArchive::new(Cursor::new(bytes)).map_err(|e| FormatError::NotOurs(e.to_string()))?;
     let read = |z: &mut zip::ZipArchive<Cursor<&[u8]>>, name: &str| -> Option<Vec<u8>> {
         let mut f = z.by_name(name).ok()?;
         let mut v = Vec::new();
-        f.read_to_end(&mut v).ok()?;
-        Some(v)
+        // Cap the decompressed size (zip bombs); an oversized part counts as unreadable.
+        f.take(MAX_PART_BYTES + 1).read_to_end(&mut v).ok()?;
+        (v.len() as u64 <= MAX_PART_BYTES).then_some(v)
     };
     let version = read(&mut z, "meta.json")
         .and_then(|meta| serde_json::from_slice::<Value>(&meta).ok())

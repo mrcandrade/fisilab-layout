@@ -110,3 +110,13 @@ mesmos termos (MIT OR Apache-2.0).
 - Documentos históricos em `docs/`, `ROADMAP.md`, `AGENTS.md` e `CLAUDE.md` foram mantidos como estavam.
 - O aplicativo web (`apps/designcraft-web`) só teve o título e algumas mensagens renomeados; ele não
   mostra a tela de abertura.
+
+## Segurança e privacidade
+
+- **Imagens vinculadas em IDML:** um IDML manipulado podia nomear qualquer arquivo local (ou caminho UNC, o que
+  vaza credenciais NTLM por SMB) em `LinkResourceURI` e embuti-lo no documento. Agora só são lidos arquivos que,
+  após `canonicalize`, estejam dentro da pasta do próprio documento (ou subpastas); caminhos UNC, remotos e de
+  dispositivo nunca são abertos, e IDML aberto a partir de bytes (sem pasta) não lê vínculos. Um vínculo
+  recusado se comporta como vínculo ausente, sem abortar a importação.
+- **ZIP bombs:** a leitura das entradas do pacote IDML (e das partes do formato nativo) agora limita o tamanho
+  descompactado: 512 MiB por entrada e 2 GiB por pacote IDML; acima disso a importação falha com erro.

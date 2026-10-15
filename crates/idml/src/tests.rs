@@ -515,6 +515,19 @@ fn rejects_non_idml() {
     assert!(matches!(import_idml(&z), Err(IdmlError::NotIdml(_))));
 }
 
+#[test]
+fn zip_bombs_are_rejected_but_ordinary_parts_still_import() {
+    let zeros = "0".repeat(5 << 20);
+    let z = zip_files(&[("Resources/big.xml", &zeros)]);
+    assert!(matches!(import_idml(&z), Err(IdmlError::Part { part, .. }) if part == "Resources/big.xml"));
+    // Each entry is under the per-entry cap, but together they exceed the package cap.
+    let part = "0".repeat(3 << 20);
+    let z = zip_files(&[("a.xml", &part), ("b.xml", &part), ("c.xml", &part)]);
+    assert!(matches!(import_idml(&z), Err(IdmlError::Part { .. })));
+    let ok = zip_files(&[("a.xml", &part)]);
+    assert!(matches!(import_idml(&ok), Err(IdmlError::NotIdml(_))), "only the missing designmap fails");
+}
+
 fn small_doc() -> Document {
     let mut d = Document::new(&NewDocument { pages: 3, ..Default::default() });
     d.swatches.push(Swatch::color("Brand", Color::rgb(1.0, 0.0, 0.0)));

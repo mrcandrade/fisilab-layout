@@ -112,7 +112,7 @@ pub(crate) fn resolve_packaged_links(document: &mut Document, dir: Option<&std::
     let Some(dir) = dir else { return };
     for asset in document.assets.values_mut() {
         let Some(link) = asset.link.as_deref() else { continue };
-        if link.len() > MAX_LINK_PATH_BYTES || std::path::Path::new(link).is_file() {
+        if link.len() > MAX_LINK_PATH_BYTES || is_remote_or_device_path(link) || std::path::Path::new(link).is_file() {
             continue;
         }
         let Some(path) = packaged_link_candidates(link, Some(dir)).into_iter().find(|p| p.is_file()) else { continue };
@@ -122,10 +122,32 @@ pub(crate) fn resolve_packaged_links(document: &mut Document, dir: Option<&std::
     }
 }
 
+/// Remote, UNC and device paths (`\\host\share`, `//host/share`, `\\?\…`, `\\.\…`). Touching one
+/// can leak NTLM credentials over SMB, so a link like that is never opened, not even to test it.
+#[cfg(not(target_arch = "wasm32"))]
+fn is_remote_or_device_path(link: &str) -> bool {
+    let mut chars = link.chars();
+    matches!((chars.next(), chars.next()), (Some('/' | '\\'), Some('/' | '\\')))
+}
+
+/// A linked file is only read from the folder of the opened document or below it, so a crafted
+/// IDML cannot pull arbitrary local files into the document. Anything else counts as missing.
+#[cfg(not(target_arch = "wasm32"))]
+fn confined_link_path(path: &std::path::Path, root: &std::path::Path) -> Option<std::path::PathBuf> {
+    if is_remote_or_device_path(&path.to_string_lossy()) {
+        return None;
+    }
+    let real = std::fs::canonicalize(path).ok()?;
+    (real.starts_with(root) && real.is_file()).then_some(real)
+}
+
 #[cfg(not(target_arch = "wasm32"))]
 fn read_packaged_link(link: &str, dir: Option<&std::path::Path>) -> Option<(String, Vec<u8>)> {
+    // Without the document's folder (bytes opened from memory) there is nothing to confine to.
+    let root = std::fs::canonicalize(dir?).ok()?;
     for path in packaged_link_candidates(link, dir) {
-        if let Ok(bytes) = std::fs::read(&path) {
+        let Some(real) = confined_link_path(&path, &root) else { continue };
+        if let Ok(bytes) = std::fs::read(&real) {
             // Keep ordinary Windows drive/UNC syntax for IDML URI export; canonicalize
             // would introduce a verbatim prefix that is not an IDML file URI.
             let path = std::path::absolute(&path).unwrap_or(path);
@@ -260,6 +282,41 @@ mod tests {
         let asset = doc.assets.values().next().unwrap();
         assert_eq!(asset.link.as_deref(), Some(oversized.as_str()));
         assert_eq!(*asset.data, png);
+        std::fs::remove_dir_all(dir).unwrap();
+    }
+
+    #[test]
+    fn links_outside_the_document_folder_or_remote_are_treated_as_missing() {
+        let nonce = std::time::SystemTime::now().duration_since(std::time::UNIX_EPOCH).unwrap().as_nanos();
+        let dir = std::env::temp_dir().join(format!("dc-confined-links-{}-{nonce}", std::process::id()));
+        let package = dir.join("package");
+        let outside = dir.join("secret.png");
+        let nested = package.join("sub").join("deep").join("inside.png");
+        std::fs::create_dir_all(nested.parent().unwrap()).unwrap();
+        let (_, png) = linked_idml("x", false).unwrap();
+        std::fs::write(&outside, &png).unwrap();
+        std::fs::write(&nested, &png).unwrap();
+
+        // An absolute path outside the folder is not read.
+        let (idml, _) = linked_idml(outside.to_str().unwrap(), false).unwrap();
+        let doc = import(&idml, Some(&package)).unwrap();
+        assert!(doc.assets.values().next().unwrap().data.is_empty(), "outside file must not be embedded");
+        // A `..` escape is not read either.
+        let (idml, _) = linked_idml(&format!("{}/../secret.png", package.display()), false).unwrap();
+        assert!(import(&idml, Some(&package)).unwrap().assets.values().next().unwrap().data.is_empty());
+        // Without a folder nothing is read.
+        let (idml, _) = linked_idml(nested.to_str().unwrap(), false).unwrap();
+        assert!(import(&idml, None).unwrap().assets.values().next().unwrap().data.is_empty());
+        // A file in a subfolder of the document folder is read.
+        let doc = import(&idml, Some(&package)).unwrap();
+        assert_eq!(*doc.assets.values().next().unwrap().data, png);
+        // UNC / device paths are rejected.
+        for bad_link in ["//server/share/a.png", "\\\\server\\share\\a.png", "\\\\?\\C:\\a.png", "\\\\.\\pipe\\x"] {
+            assert!(is_remote_or_device_path(bad_link), "{bad_link}");
+            assert!(read_packaged_link(bad_link, Some(&package)).is_none());
+        }
+        assert!(!is_remote_or_device_path("C:\\a\\b.png"));
+        assert!(!is_remote_or_device_path("/a/b.png"));
         std::fs::remove_dir_all(dir).unwrap();
     }
 }

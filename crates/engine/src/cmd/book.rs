@@ -45,7 +45,7 @@ fn load(path: &str) -> Result<designcraft_doc::Document> {
         vec![]
     };
     if path.to_lowercase().ends_with(".idml") {
-        return designcraft_idml::import_idml(&bytes).map_err(|e| EngineError::Other(format!("{path}: {e}")));
+        return super::interchange::import(&bytes, std::path::Path::new(path).parent()).map_err(|e| EngineError::Other(format!("{path}: {e}")));
     }
     super::file::from_bytes(&bytes).map_err(|e| EngineError::Other(format!("{path}: {e}")))
 }

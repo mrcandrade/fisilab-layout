@@ -29,22 +29,23 @@ fn uniform_cell_stroke(edges: &[designcraft_doc::CellStrokeAttrs; 4]) -> Option<
     Some(designcraft_doc::CellStroke { weight: first.weight?, color: first.color.clone()?, tint: first.tint?, kind: first.kind.clone()? })
 }
 
-/// Import an IDML package. Linked images are read from disk when available (not on wasm).
+/// Import an IDML package. Linked files are not read: the bytes carry no folder to confine the
+/// links to, and a crafted package must not be able to name arbitrary local (or UNC) files. Use
+/// [`import_idml_with`] to supply a reader that only serves files from the document's folder.
 pub fn import_idml(bytes: &[u8]) -> Result<Document> {
-    import_idml_with(bytes, &default_reader)
+    import_idml_with(bytes, &|_| None)
 }
 
-fn default_reader(path: &str) -> Option<Vec<u8>> {
-    #[cfg(not(target_arch = "wasm32"))]
-    {
-        std::fs::read(path).ok()
-    }
-    #[cfg(target_arch = "wasm32")]
-    {
-        let _ = path;
-        None
-    }
-}
+/// Most one package entry may decompress to.
+#[cfg(not(test))]
+const MAX_ENTRY_BYTES: u64 = 512 << 20;
+#[cfg(test)]
+const MAX_ENTRY_BYTES: u64 = 4 << 20;
+/// Most a whole package may decompress to.
+#[cfg(not(test))]
+const MAX_PACKAGE_BYTES: u64 = 2 << 30;
+#[cfg(test)]
+const MAX_PACKAGE_BYTES: u64 = 6 << 20;
 
 /// Import with a custom reader for linked files (`path` → bytes).
 pub fn import_idml_with(bytes: &[u8], read_link: &dyn Fn(&str) -> Option<Vec<u8>>) -> Result<Document> {
@@ -64,6 +65,7 @@ pub struct Imported {
 pub fn import_idml_report(bytes: &[u8], read_link: &dyn Fn(&str) -> Option<Vec<u8>>) -> Result<Imported> {
     let mut zip = zip::ZipArchive::new(std::io::Cursor::new(bytes)).map_err(|e| IdmlError::NotIdml(e.to_string()))?;
     let mut files: HashMap<String, Vec<u8>> = HashMap::new();
+    let mut total: u64 = 0;
     // Normalised part name → entry name, first entry wins (zip order, so the choice is stable).
     let mut lenient: HashMap<String, String> = HashMap::new();
     for i in 0..zip.len() {
@@ -74,7 +76,19 @@ pub fn import_idml_report(bytes: &[u8], read_link: &dyn Fn(&str) -> Option<Vec<u
         let name = f.name().to_string();
         // The size is what the archive claims: don't reserve more than a sane part up front.
         let mut buf = Vec::with_capacity((f.size() as usize).min(1 << 24));
-        f.read_to_end(&mut buf).map_err(|e| IdmlError::Part { part: name.clone(), msg: e.to_string() })?;
+        // The claimed size can lie, so cap what is actually decompressed (zip bombs): per entry
+        // and for the whole package. One byte past the limit tells "at the limit" from "over".
+        let allowed = MAX_ENTRY_BYTES.min(MAX_PACKAGE_BYTES - total);
+        (&mut f).take(allowed + 1).read_to_end(&mut buf).map_err(|e| IdmlError::Part { part: name.clone(), msg: e.to_string() })?;
+        if buf.len() as u64 > allowed {
+            let msg = if buf.len() as u64 > MAX_ENTRY_BYTES {
+                format!("decompresses to more than {} MiB", MAX_ENTRY_BYTES >> 20)
+            } else {
+                format!("the package decompresses to more than {} MiB", MAX_PACKAGE_BYTES >> 20)
+            };
+            return Err(IdmlError::Part { part: name, msg });
+        }
+        total += buf.len() as u64;
         lenient.entry(normalize_part_name(&name)).or_insert_with(|| name.clone());
         files.insert(name, buf);
     }
