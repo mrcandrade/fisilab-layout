@@ -125,3 +125,4 @@ mesmos termos (MIT OR Apache-2.0).
   caminhos UNC, remotos ou de dispositivo (`\host\share`, `//host/share`, `\?\`, `\.\`); o vínculo
   aparece como ausente. Isso evita vazamento de credenciais NTLM por SMB ao abrir um IDML manipulado.
 - **Linux:** o empacotamento (AppImage e .deb) usa os nomes, ícones e ids da Suíte (`FisiLab-Layout-<versão>-x86_64.AppImage`, `fisilab-layout_<versão>_amd64.deb`, id `br.ufrgs.fisilab.layout`).
+- **macOS:** o empacotamento (DMG universal) usa os nomes, ícone e ids da Suíte (`FisiLab-Layout-<versão>-macOS.dmg`, id `br.ufrgs.fisilab.layout`).
