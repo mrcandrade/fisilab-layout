@@ -1,0 +1,57 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- AppStream metadata (software centres). Template: package.sh substitutes @VERSION@ and
+     @DATE@ from Cargo.toml and the build date. -->
+<component type="desktop-application">
+  <id>br.ufrgs.fisilab.layout</id>
+  <metadata_license>CC0-1.0</metadata_license>
+  <project_license>MIT OR Apache-2.0</project_license>
+  <name>Layout</name>
+  <summary>Diagramação e editoração — Suíte FisiLab (alternativa livre)</summary>
+  <developer id="br.ufrgs.fisilab">
+    <name>FisiLab — LARFIC</name>
+  </developer>
+  <description>
+    <p>
+      O Layout é o aplicativo de diagramação e editoração da Suíte FisiLab, uma alternativa livre
+      ao Adobe InDesign: páginas mestras, quadros de texto encadeados, estilos de parágrafo e de
+      caractere, amostras de cor, contorno de texto, importação e exportação de IDML.
+    </p>
+    <p>
+      Baseado no DesignCraft, do ArtCraft Team e contribuidores (MIT ou Apache 2.0).
+    </p>
+  </description>
+  <launchable type="desktop-id">br.ufrgs.fisilab.layout.desktop</launchable>
+  <icon type="stock">br.ufrgs.fisilab.layout</icon>
+  <!-- Only url types known to appstream 0.15 (Ubuntu 22.04, where CI validates): no vcs-browser. -->
+  <url type="homepage">https://github.com/mrcandrade/larfic</url>
+  <url type="bugtracker">https://github.com/mrcandrade/fisilab-layout/issues</url>
+  <categories>
+    <category>Graphics</category>
+    <category>Publishing</category>
+  </categories>
+  <keywords>
+    <keyword>diagramação</keyword>
+    <keyword>editoração</keyword>
+    <keyword>layout</keyword>
+    <keyword>idml</keyword>
+  </keywords>
+  <branding>
+    <color type="primary" scheme_preference="light">#9fd0ff</color>
+    <color type="primary" scheme_preference="dark">#1f64ba</color>
+  </branding>
+  <requires>
+    <display_length compare="ge">760</display_length>
+  </requires>
+  <supports>
+    <control>keyboard</control>
+    <control>pointing</control>
+    <control>tablet</control>
+  </supports>
+  <provides>
+    <binary>fisilab-layout</binary>
+  </provides>
+  <content_rating type="oars-1.1"/>
+  <releases>
+    <release version="@VERSION@" date="@DATE@"/>
+  </releases>
+</component>

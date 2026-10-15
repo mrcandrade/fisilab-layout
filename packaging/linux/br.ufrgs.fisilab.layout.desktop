@@ -1,0 +1,13 @@
+[Desktop Entry]
+Type=Application
+Name=Layout
+GenericName=Diagramação e editoração
+Comment=Diagramação e editoração — Suíte FisiLab (alternativa livre)
+Exec=fisilab-layout %F
+TryExec=fisilab-layout
+Icon=br.ufrgs.fisilab.layout
+Terminal=false
+StartupNotify=true
+StartupWMClass=br.ufrgs.fisilab.layout
+Categories=Graphics;Publishing;
+Keywords=layout;page;desktop publishing;dtp;magazine;book;indesign;idml;typesetting;diagramação;editoração;revista;livro;

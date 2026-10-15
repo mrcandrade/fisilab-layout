@@ -124,3 +124,4 @@ mesmos termos (MIT OR Apache-2.0).
   resolução de vínculos na importação não fazem nenhuma chamada ao sistema de arquivos (nem `stat`) em
   caminhos UNC, remotos ou de dispositivo (`\host\share`, `//host/share`, `\?\`, `\.\`); o vínculo
   aparece como ausente. Isso evita vazamento de credenciais NTLM por SMB ao abrir um IDML manipulado.
+- **Linux:** o empacotamento (AppImage e .deb) usa os nomes, ícones e ids da Suíte (`FisiLab-Layout-<versão>-x86_64.AppImage`, `fisilab-layout_<versão>_amd64.deb`, id `br.ufrgs.fisilab.layout`).

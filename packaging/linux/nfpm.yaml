@@ -3,7 +3,7 @@
 # exports VERSION and NFPM_ARCH.
 #
 #   nfpm package -f packaging/linux/nfpm.yaml -p deb -t dist/release/
-name: designcraft
+name: fisilab-layout
 arch: ${NFPM_ARCH}
 platform: linux
 version: ${VERSION}
@@ -12,15 +12,16 @@ version_schema: semver
 release: 1
 section: graphics
 priority: optional
-maintainer: ${DESIGNCRAFT_MAINTAINER}
-vendor: Learning Machines LLC
-homepage: https://github.com/mrcandrade/larfic/tree/main/suite-fisilab
+maintainer: "FisiLab - LARFIC/UFRGS <mrcandrade@users.noreply.github.com>"
+vendor: FisiLab - LARFIC/UFRGS
+homepage: https://github.com/mrcandrade/larfic
 license: MIT OR Apache-2.0
 description: |-
-  Open-source, native page layout and publishing that works the way InDesign users expect.
-  Spreads and parent pages, threaded text frames, paragraph and character styles, swatches,
-  text wrap and a Knuth-Plass paragraph composer; IDML import and export.
-  Includes designcraft-cli, a headless renderer and command runner.
+  Layout, da Suíte FisiLab: diagramação e editoração (alternativa livre ao Adobe InDesign).
+  Páginas mestras, quadros de texto encadeados, estilos de parágrafo e de caractere, amostras
+  de cor, contorno de texto e importação/exportação de IDML.
+  Inclui o fisilab-layout-cli, um renderizador e executor de comandos sem interface.
+  Baseado no DesignCraft, do ArtCraft Team e contribuidores (MIT ou Apache 2.0).
 
 # The binaries link only glibc and libgcc_s directly. Windowing (X11/Wayland, xkbcommon) and the
 # GPU (Vulkan, EGL/GL) are loaded at runtime, so they are dependencies/recommendations here
@@ -55,11 +56,11 @@ overrides:
       - xdg-desktop-portal
 
 contents:
-  - src: ${STAGE}/usr/bin/designcraft
-    dst: /usr/bin/designcraft
+  - src: ${STAGE}/usr/bin/fisilab-layout
+    dst: /usr/bin/fisilab-layout
     file_info: { mode: 0755 }
-  - src: ${STAGE}/usr/bin/designcraft-cli
-    dst: /usr/bin/designcraft-cli
+  - src: ${STAGE}/usr/bin/fisilab-layout-cli
+    dst: /usr/bin/fisilab-layout-cli
     file_info: { mode: 0755 }
   - src: ${STAGE}/usr/share/
     dst: /usr/share/
