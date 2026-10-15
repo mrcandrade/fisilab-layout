@@ -45,9 +45,7 @@
 
 ### Windows
 
-Baixe o instalador `FisiLab-Layout-Setup-<versão>.exe` no portal de downloads da
-[Suíte FisiLab](https://github.com/mrcandrade/larfic/tree/main/suite-fisilab) ou na página de
-[Releases do `mrcandrade/fisilab-layout`](https://github.com/mrcandrade/fisilab-layout/releases) e execute-o.
+Baixe o instalador `FisiLab-Layout-Setup-<versão>.exe` na [página de downloads da Suíte FisiLab](https://github.com/mrcandrade/larfic/releases/latest) e execute-o.
 
 ### Compilar a partir do código
 
@@ -85,11 +83,15 @@ Conhecimento produzido em uma universidade pública deve circular livremente, e 
 usamos para ensinar, pesquisar e criar também devem ser livres. Leia o
 [Manifesto pelas tecnologias livres](https://github.com/mrcandrade/larfic/blob/main/suite-fisilab/MANIFESTO.md).
 
+## Privacidade
+
+O Layout não coleta dados de uso nem envia o conteúdo dos seus arquivos para lugar nenhum: não há
+telemetria, estatísticas nem verificação automática de atualizações. Veja o que ele guarda no seu
+computador e quando usa a internet no [aviso de privacidade da Suíte FisiLab](https://github.com/mrcandrade/larfic/blob/main/suite-fisilab/PRIVACIDADE.md).
+
 ---
 
 <p align="center">
-  <img src="assets/fisilab/ufrgs-logo.gif" alt="UFRGS" height="48">
-  &nbsp;&nbsp;&nbsp;
   <img src="assets/fisilab/larfic-logo.png" alt="LARFIC — FisiLab" height="48">
   &nbsp;&nbsp;&nbsp;
   <img src="assets/fisilab/cta-logo.webp" alt="CTA — Centro de Tecnologia Acadêmica" height="48">
