@@ -11,7 +11,7 @@
 
 <p align="center">
   Disponibilizado pelo <b>FisiLab — LARFIC · UFRGS</b> em parceria com o <b>CTA — Centro de
-  Tecnologia Acadêmica</b>, para estudantes, professores e técnicos da UFRGS.
+  Tecnologia Acadêmica</b>, para democratizar o acesso à tecnologia entre os alunos da UFRGS.
 </p>
 
 <p align="center">

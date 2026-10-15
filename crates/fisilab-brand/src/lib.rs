@@ -32,7 +32,7 @@ pub const PARTNER: &str = "CTA — Centro de Tecnologia Acadêmica";
 /// Nome da suíte.
 pub const SUITE: &str = "Suíte FisiLab";
 /// Público.
-pub const AUDIENCE: &str = "Para uso de estudantes, professores e técnicos da UFRGS.";
+pub const AUDIENCE: &str = "Para democratizar o acesso à tecnologia entre os alunos da UFRGS.";
 
 /// Página da suíte (código-fonte, instaladores, créditos).
 pub const SUITE_URL: &str = "https://github.com/mrcandrade/larfic/tree/main/suite-fisilab";
